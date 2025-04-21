@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- <meta charset="UTF-8" name="_csrf" content="${_csrf.token}">
+    <meta name="_csrf_header" content="${_csrf.headerName}" /> -->
+    <meta charset="UTF-8">
+    <meta th:name="'_csrf'" th:content="${_csrf.token}">
+    <meta th:name="'_csrf_header'" th:content="${_csrf.headerName}" />
+    <title>Main Page</title>
+    <link th:href="@{/main.css}" rel="stylesheet" />
+</head>
+
+<script src="https://unpkg.com/htmx.org@1.9.5"></script>
+
+<body>
+    <div>
+
+        <div class="border border-b-gray-200">
+            <div class="py-4 px-20 flex justify-between items-center">
+                <span class="text-[35px] font-sans">Management Center</span>
+                <div class="flex gap-8 items-center justify-between">
+                    <div class="flex gap-8 items-center justify-between">
+                        <button class="cursor-pointer text-[20px]">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                                class="w-20 h-20 fill-[#1C2E45] hover:fill-blue-500 hover:opacity-100 opacity-60 transition-colors duration-200">
+                                <path
+                                    d="M16.571 6.26269C15.921 6.55269 14.911 7.11269 13.771 7.76269L8.311 7.00269C8.218 6.98869 8.111 6.98069 8.002 6.98069C7.791 6.98069 7.588 7.01069 7.395 7.06669L6.21 7.40269C6.11 7.40269 6.11 7.50269 6.21 7.54269L10.77 9.54269C9.23 10.4627 7.86 11.3027 7.26 11.6827C7.13 11.7647 6.972 11.8127 6.802 11.8127C6.708 11.8127 6.618 11.7977 6.534 11.7707L5.34 11.3927C5.254 11.3617 5.154 11.3437 5.05 11.3437C4.946 11.3437 4.846 11.3617 4.754 11.3947L4 11.7027L6.52 13.8027C6.672 13.9297 6.869 14.0077 7.085 14.0077C7.214 14.0077 7.336 13.9797 7.446 13.9307C8.65 13.3927 11.82 11.9327 14.18 10.7027C19.42 7.92269 20 7.44269 20 7.00269C20 6.31269 18 5.60269 16.57 6.26269H16.571Z" />
+                                <path d="M4.00101 17.0027H20.001V18.0027H4.00101V17.0027Z" />
+                            </svg>
+                        </button>
+                        <button class="cursor-pointer text-[20px]">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                                class="w-20 h-20 fill-[#1C2E45] hover:fill-green-500 hover:opacity-100 opacity-60 transition-colors duration-200">
+                                <path
+                                    d="M17.64 11C16.93 10.8 15.75 10.57 14.41 10.33L10.59 6.09C10.381 5.86 10.128 5.674 9.844 5.546L8.65 5C8.56 5 8.5 5 8.55 5.11C8.6 5.22 10 8 10.84 9.7C9 9.41 7.34 9.17 6.61 9.07C6.352 9.023 6.136 8.872 6.002 8.664L5.28 7.59C5.165 7.422 5 7.296 4.806 7.232L4 7L4.61 10.26C4.677 10.6 4.928 10.869 5.254 10.959C6.58 11.34 10.07 12.3 12.78 12.88C18.78 14.16 19.58 14.16 19.9 13.79C20.22 13.42 19.23 11.41 17.64 11Z" />
+                                <path d="M4 17H20V18H4V17Z" />
+                            </svg>
+                        </button>
+                    </div>
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="w-full p-8 shadow-xl">
+            <div class="p-8 rounded-xl shadow-lg">
+
+                <div class="flex justify-between items-center py-4">
+                    <p th:text="'All Users: ' + ${users.size()}"></p>
+                </div>
+
+                <div class="overflow-auto rounded-xl shadow-lg">
+                    <table class="w-full text-md bg-white table-auto">
+                        <thead class="">
+                            <tr class="truncate border-b bg-gray-200">
+                                <th class="text-md p-4 text-left">Username</th>
+                                <th class="text-md p-4 text-left">Password</th>
+                                <th class="text-md p-4 text-left ">Email</th>
+                                <th class="text-md p-4 text-center ">Role</th>
+                                <th class="text-md p-4 text-center">Staff ID</th>
+                                <th class="text-md p-4 text-left">Airport</th>
+                                <th class="text-md p-4 w-full">Remark</th>
+                                <th colspan="2" class="">
+                                    <button class="p-1 hover:scale-110 transition-transform duration-150" title="Add"
+                                        onclick="openModal(); loadUserForm('new')">
+                                        <svg class="w-8 h-8 fill-[#1C2E45] hover:fill-green-500 hover:opacity-100 opacity-60 transition-colors duration-200"
+                                            viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12 5H7V0H5V5H0V7H5V12H7V7H12V5Z" />
+                                        </svg>
+                                    </button>
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tbody class="">
+                            <tr th:each="user : ${users}" class="hover:bg-slate-200">
+                                <td class="p-3 border-b border-x text-left font-semibold" th:text="${user.username}">
+                                </td>
+                                <td class="p-3 border-b border-x text-left" th:text="${user.password}"></td>
+                                <td class="p-3 border-b border-x text-left" th:text="${user.email}"></td>
+                                <td class="p-3 border-b border-x text-left" th:text="${user.role}"></td>
+                                <td class="p-3 border-b border-x text-left" th:text="${user.staffid}"></td>
+                                <td class="p-3 border-b border-x text-left" th:text="${user.hopo}"></td>
+                                <td class="p-3 border-b border-x text-left" th:text="${user.remark}"></td>
+                                <td class="p-3 border-b border-x border-l text-center">
+                                    <button class="p-1 hover:scale-110 transition-transform duration-150" title="Edit"
+                                        th:attr="hx-get=@{/management/edit/{username}(username=${user.username})}"
+                                        hx-target="#modalFormContainer" hx-swap="innerHTML" onclick="openModal()">
+                                        <svg viewBox="0 0 16 16"
+                                            class="w-6 h-6 fill-[#1C2E45] hover:fill-yellow-500 hover:opacity-100 opacity-60 transition-colors duration-200"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M15.5 13.4L7.7 5.6C7.9 5.1 8 4.6 8 4C8 1.8 6.2 0 4 0C3.4 0 2.9 0.1 2.4 0.3L5.3 3.2L3.2 5.3L0.3 2.4C0.1 2.9 0 3.4 0 4C0 6.2 1.8 8 4 8C4.6 8 5.1 7.9 5.6 7.7L13.4 15.5C14 16.1 14.9 16.1 15.5 15.5C16.1 14.9 16.1 14 15.5 13.4ZM6.8 7.6L5.4 6.2L6.3 5.3L7.7 6.7L6.8 7.6ZM14.2 15C13.8 15 13.4 14.7 13.4 14.2C13.4 13.8 13.7 13.4 14.2 13.4C14.7 13.4 15 13.7 15 14.2C15 14.7 14.7 15 14.2 15Z" />
+                                        </svg>
+                                    </button>
+                                </td>
+                                <td class="p-3 border-b border-l border-x text-center">
+                                    <button class="p-1 hover:scale-110 transition-transform duration-150 text-red-600"
+                                        title="Delete"
+                                        th:attr="hx-delete=@{/management/delete/{username}(username=${user.username})}"
+                                        hx-target="closest tr" hx-swap="outerHTML"
+                                        hx-confirm="Are you sure you want to delete this user?">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="w-5 h-5 fill-[#1C2E45] hover:fill-red-500 hover:opacity-100 opacity-60 transition-colors duration-200"
+                                            viewBox="0 0 15 15">
+                                            <path
+                                                d="M14.2 2.2L12 0L7.1 5L2.2 0L0 2.2L5 7.1L0 12L2.2 14.2L7.1 9.2L12 14.2L14.2 12L9.2 7.1L14.2 2.2Z"
+                                                viewBox="0 0 16 16">/>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal -->
+    <div id="myModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white p-6 rounded shadow-lg w-1/3">
+            <h2 class="text-xl mb-4 font-semibold" id="modalTitle">User Form</h2>
+
+            <!-- แทนที่ด้วย HTMX -->
+            <div id="modalFormContainer" hx-target="this" hx-swap="innerHTML">
+                <!-- ฟอร์ม Add/Edit จะมาอยู่ตรงนี้ -->
+            </div>
+
+            <div class="flex justify-end mt-4">
+                <button type="button" onclick="closeModal()"
+                    class="ml-2 bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+<!-- JavaScript -->
+<script>
+    function openModal() {
+        document.getElementById('myModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+        document.getElementById('myModal').classList.add('hidden');
+    }
+
+    function loadUserForm(username) {
+        const container = document.getElementById('modalFormContainer');
+        const modalTitle = document.getElementById('modalTitle');
+
+        if (username === 'new') {
+            modalTitle.innerText = 'Add New User';
+            htmx.ajax('GET', '/management/add', { target: container, swap: 'innerHTML' });
+        } else {
+            modalTitle.innerText = 'Edit User';
+            htmx.ajax('GET', `/management/edit/${username}`, { target: container, swap: 'innerHTML' });
+        }
+
+        openModal();
+    }
+
+</script>
+<script>
+    document.addEventListener("htmx:configRequest", function (event) {
+        var token = document.querySelector("meta[name='_csrf']").content;
+        var header = document.querySelector("meta[name='_csrf_header']").content;
+        event.detail.headers[header] = token;
+    });
+</script>
+
+
+</html>

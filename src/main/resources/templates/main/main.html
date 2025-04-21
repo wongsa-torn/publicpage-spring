@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Main Page</title>
+    <link th:href="@{/main.css}" rel="stylesheet" />
+</head>
+
+<body>
+    <div>
+        <div class="flex flex-col gap-4">
+            <h2>Main</h2>
+            <img class="mx-auto h-10 w-auto" src="/images/aot.png" alt="AOT">
+            <div class="text-teal-300">Login สำเร็จ</div>
+            <div class="border border-black bg-purple-500">
+                <div class="text-blue-500">ทดสอบ class tailwind</div>
+
+
+            </div>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="bg-red-500 text-blue-800 px-4 py-2 rounded">Logout</button>
+            </form>
+            <div class="py-8">
+                <!-- <p>Componemt Button</p> -->
+                <div class="text-purple-900 text-[83px] bg-slate-200">
+                    text
+                    <div class="text-purple-300 text-[75px] bg-yellow-600">text</div>
+                    <div class="text-purple-300 text-[75px] bg-green-100">text</div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <!-- <a href="/management" class="btn btn-primary">Go to Management</a> -->
+                    <a class="link rounded-sm px-8 py-3 bg-indigo-600 text-white text-sm" th:href="@{/management}">Go To
+                        Management</a>
+                    <!-- <div class="">
+                        <span th:replace="fragments/button :: button('Go To Management', '/management')"></span>
+                    </div>
+                    <div class="">
+                        <span th:replace="fragments/button :: button_change('Go To Management', '/management')"></span>
+                    </div> -->
+                </div>
+
+            </div>
+        </div>
+
+        <!-- <div class="grid grid-cols-12">
+            <div class="col-span-4"><span>Menu 1</span>
+                <p>Content Here</p>
+                <p>เครื่องบินขาออก</p>
+            </div>
+            <div class="col-span-4"><span>Menu 2</span>
+                <p>Content Here</p>
+                <p>เครื่องบินขาเข้า</p>
+            </div>
+            <div class="col-span-4"><span>Menu 3</span>
+                <div class="flex flex-col">
+                    <span>Content Here</span>
+                    <span>จัดการ User</span>
+                </div>
+
+            </div>
+        </div> -->
+
+    </div>
+</body>
+
+</html>
