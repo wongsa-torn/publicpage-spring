@@ -121,8 +121,8 @@
     });
 
     function updateQatarStats() {
-        fetch('/qatar/stats')
-        // fetch(`${contextPath}/qatar/stats`)
+        // fetch('/qatar/stats')
+        fetch(`${contextPath}/qatar/stats`)
             .then(res => res.json())
             .then(data => {
                 document.getElementById('updateDateText').textContent = data.datestamp;

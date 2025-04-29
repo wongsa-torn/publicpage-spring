@@ -427,9 +427,9 @@
         try {
             // const response = await fetch(`${contextPath}/departure?airportCode=${airportCode}&type=${type}&continue=` + Date.now());
             // แบบ ทดสอบ
-            const response = await fetch(`/departure?airportCode=${airportCode}&continue=` + Date.now());
+            // const response = await fetch(`/departure?airportCode=${airportCode}&continue=` + Date.now());
             // แบบ ใช้จริง
-            //const response = await fetch(`${contextPath}/departure?airportCode=${airportCode}&type=${type}&continue=` + Date.now());
+            const response = await fetch(`${contextPath}/departure?airportCode=${airportCode}&type=${type}&continue=` + Date.now());
             const html = await response.text();
 
             const parser = new DOMParser();

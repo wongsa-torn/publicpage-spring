@@ -156,9 +156,9 @@
     async function fetchArrivals() {
         try {
             // แบบ ทดสอบ
-            const response = await fetch(`/arrival?airportCode=${airportCode}&continue=` + Date.now());
+            // const response = await fetch(`/arrival?airportCode=${airportCode}&continue=` + Date.now());
             // แบบ ใช้จริง
-            // const response = await fetch(`${contextPath}/arrival?airportCode=${airportCode}&continue=` + Date.now());
+            const response = await fetch(`${contextPath}/arrival?airportCode=${airportCode}&continue=` + Date.now());
 
             const html = await response.text();
 
