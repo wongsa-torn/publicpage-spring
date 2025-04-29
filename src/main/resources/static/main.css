@@ -788,6 +788,10 @@ video {
   height: 4vh;
 }
 
+.h-\[5vh\] {
+  height: 5vh;
+}
+
 .h-\[6vh\] {
   height: 6vh;
 }
@@ -798,6 +802,10 @@ video {
 
 .h-\[83vh\] {
   height: 83vh;
+}
+
+.h-\[85vh\] {
+  height: 85vh;
 }
 
 .h-\[90px\] {
@@ -1792,10 +1800,6 @@ video {
 
   .lg\:text-\[15px\] {
     font-size: 15px;
-  }
-
-  .lg\:text-\[20px\] {
-    font-size: 20px;
   }
 
   .lg\:text-\[30px\] {

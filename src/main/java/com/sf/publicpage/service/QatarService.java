@@ -90,8 +90,10 @@ public class QatarService {
                     ItemQatar obj = new ItemQatar();
                     // ส่งรหัสสายการบินแทนรูป
 
-                    obj.setFlight(depdata.path("FLNO").asText());
-                    obj.setFlightTo(depdata.path("CITYNAMEALL").asText());
+                    // obj.setFlight(depdata.path("FLNO").asText());
+                    obj.setFlight(getMainFlight(FLNO, FLNO));
+                    // obj.setFlightTo(depdata.path("CITYNAMEALL").asText());
+                    obj.setFlightTo(getMainFlight(depdata.get("CITYNAMEALL") + "", FLNO));
                     obj.setGate(depdata.get("GATE").asText());
                     obj.setStatus(depdata.path("REMGATE").asText());
                     obj.setTimeDepart(SOBT);
@@ -169,5 +171,10 @@ public class QatarService {
             }
         }
         return null;
+    }
+
+    public static String getMainFlight(String input, String FLNO) {
+        input = input.replace("\"", ""); // ตัดฟันหนูออกทั้งหมด
+        return input.trim();
     }
 }

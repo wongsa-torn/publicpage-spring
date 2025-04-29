@@ -83,10 +83,7 @@
         </div>
 
         <!-- Body Section with Scroll -->
-
-
-
-        <div class="relative h-[83vh] overflow-hidden"> <!-- ความสูงที่ต้องการ -->
+        <div class="relative h-[85vh] overflow-hidden"> <!-- ความสูงที่ต้องการ -->
             <div id="autoScrollContainer" class="h-full overflow-y-auto hide-scrollbar">
                 <!-- เปลี่ยน overflow เป็น auto -->
                 <div>
@@ -427,9 +424,9 @@
         try {
             // const response = await fetch(`${contextPath}/departure?airportCode=${airportCode}&type=${type}&continue=` + Date.now());
             // แบบ ทดสอบ
-            // const response = await fetch(`/departure?airportCode=${airportCode}&continue=` + Date.now());
+            const response = await fetch(`/departure?airportCode=${airportCode}&continue=` + Date.now());
             // แบบ ใช้จริง
-            const response = await fetch(`${contextPath}/departure?airportCode=${airportCode}&type=${type}&continue=` + Date.now());
+            // const response = await fetch(`${contextPath}/departure?airportCode=${airportCode}&type=${type}&continue=` + Date.now());
             const html = await response.text();
 
             const parser = new DOMParser();
@@ -453,69 +450,6 @@
             console.error('❌ โหลดข้อมูลไม่สำเร็จ:', err);
         }
     }
-
-    // function autoScroll() {
-    //     if (paused) return;
-    //     const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
-    //     const currentScroll = scrollContainer.scrollTop;
-
-    //     if ((direction === 1 && currentScroll >= maxScroll) ||
-    //         (direction === -1 && currentScroll <= 0)) {
-    //         paused = true;
-
-    //         if (direction === 1) {
-    //             // setTimeout(() => {
-    //             //     direction *= -1;
-    //             //     paused = false;
-    //             //     requestAnimationFrame(autoScroll);
-    //             // }, delay);
-    //             fetchDepartures().then(() => {
-    //                 paused = false;
-    //                 requestAnimationFrame(autoScroll);
-    //             });
-    //         } else {
-    //             // fetchDepartures().then(() => {
-    //             //     setTimeout(() => {
-    //             //         direction *= -1;
-    //             //         paused = false;
-    //             //         requestAnimationFrame(autoScroll);
-    //             //     }, delay);
-    //             // });
-    //             setTimeout(() => {
-    //                 direction *= -1;
-    //                 paused = false;
-    //                 requestAnimationFrame(autoScroll);
-    //             }, delay);
-    //         }
-    //     } else {
-    //         const scrollStep = direction === 1 ? scrollSpeedDown : scrollSpeedUp;
-    //         scrollContainer.scrollTop += direction * scrollStep;
-    //         requestAnimationFrame(autoScroll);
-    //     }
-    // }
-
-    // function autoScroll() {
-    //     if (paused) return;
-
-    //     const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
-    //     const currentScroll = scrollContainer.scrollTop;
-
-    //     if (direction === 1 && currentScroll >= maxScroll) {
-    //         paused = true;
-
-    //         fetchDepartures().then(() => {
-    //             setTimeout(() => {
-    //                 paused = false;
-    //                 requestAnimationFrame(autoScroll);
-    //             }, delay); // ✅ หน่วงก่อนเริ่ม scroll ใหม่
-    //         });
-
-    //     } else {
-    //         const scrollStep = scrollSpeedDown;
-    //         scrollContainer.scrollTop += scrollStep;
-    //         requestAnimationFrame(autoScroll);
-    //     }
-    // }
 
     function autoScroll() {
         if (paused) return;
