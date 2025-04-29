@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auto Scroll Table</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        tbody {
+            scroll-behavior: smooth;
+        }
+    </style>
+    <style>
+        /* ซ่อน scrollbar สำหรับ tbody */
+        #tableBody::-webkit-scrollbar {
+            display: none;
+        }
+
+        #tableBody {
+            -ms-overflow-style: none;
+            /* สำหรับ IE และ Edge */
+            scrollbar-width: none;
+            /* สำหรับ Firefox */
+        }
+    </style>
+
+</head>
+
+<body class="bg-gray-100 flex justify-center h-screen">
+    <div class="w-full bg-white overflow-hidden">
+        <!-- <table class="table-fixed w-full text-left border-collapse">
+            <thead class="bg-gray-200 sticky top-0">
+                <tr>
+                    <th class="px-4 py-2">#</th>
+                    <th class="px-4 py-2">Value</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody" class="h-96 overflow-y-scroll block">
+                Rows will be injected by JS -->
+        <!-- </tbody>
+        </table> -->
+        <div class="relative h-[7vh]">
+            <img class="w-full" src="/images/Arrivals.png" alt="Arrivals">
+            <!-- <span class="absolute top-0 right-11 text-[40px] font-bold text-white">BKK</span> -->
+            <select class="absolute top-1.5 right-8 text-[36px] font-bold text-black">
+                <option>BKK</option>
+                <option>DMK</option>
+                <option>HKT</option>
+                <option>HDY</option>
+                <option>CNX</option>
+                <option>CEI</option>
+            </select>
+        </div>
+
+
+        <div class="text-white">
+            <div class="sticky top-0 flex items-center h-[6vh] text-[30px] font-bold bg-green-950">
+                <span class="px-4 py-2 min-w-[100px] w-[100px] text-center">Time</span>
+                <span class="px-4 py-2 min-w-[200px] w-[200px] text-center">Airlines</span>
+                <span class="px-4 py-2 w-[50%] min-[150px]">From</span>
+                <span class="px-4 py-2 min-w-[200x] w-[200px] text-center">Flight</span>
+                <span class="px-4 py-2 min-w-[150px] w-[150px] text-center">Arrives</span>
+                <span class="px-4 py-2 min-w-[150px] w-[150px] text-center">Belt</span>
+                <span class="px-4 py-2 min-w-[250px] w-[250px] text-center">Remark</span>
+            </div>
+
+            <div id="tableBody" class="h-[83vh] overflow-y-scroll block">
+                <!-- Rows will be injected by JS -->
+            </div>
+        </div>
+
+        <div class="h-[4vh] flex items-center px-4 bg-blue-400">
+            <span>Page Last Update On :21/04/2025 10:10 ( Total : 99 )</span>
+        </div>
+    </div>
+
+    <script>
+        const tbody = document.getElementById("tableBody");
+
+        // สร้าง mock ข้อมูล 1-100
+        const data = Array.from({ length: 10 }, (_, i) => i + 1);
+
+        function renderRows() {
+            tbody.innerHTML = "";
+            for (let i = 0; i < data.length; i++) {
+                const isEven = data[i] % 2 === 0;
+                const bgColor = isEven ? "bg-[#2F7D17]" : "bg-green-950";
+
+                const row = document.createElement("div");
+                row.className = "";
+                row.innerHTML = `
+                <div class="flex text-[24px] font-bold ${bgColor} truncate">
+                    <span class="px-4 py-2 min-w-[100px] w-[100px] flex items-center justify-center text-[30px]">12:${i + 1}</span>
+                    <div class="px-4 py-2 min-w-[200px] w-[200px] flex items-center">
+                        <span class="bg-gray-200 flex items-center gap-2 rounded-xl overflow-hidden">
+                           <img src="/images/airport/UO_M.gif" alt="EY" class="w-full" /> 
+                        </span>
+                    </div>
+                    <div class="px-4 py-2 w-[50%] min-[150px] flex items-center">
+                        <div class="">
+                            <span>Suvarnabhumi : ${i + 1}</span>
+                        </div>
+                    </div>
+                    <div class="px-4 py-2 min-w-[200px] w-[200px] flex items-center justify-center">
+                        <div class="flex justify-center items-center">
+                            <span>KR : ${i + 1}</span>
+                        </div>
+                    </div>
+                    <span class="px-4 py-2 min-w-[150px] w-[150px] flex items-center justify-center">16:${i + 1}</span>
+                    <div class="px-4 py-2 min-w-[150px] w-[150px] flex items-center justify-center">
+                        <div class="bg-yellow-300 w-12 h-12 flex justify-center items-center rounded-xl text-black">
+                            <span>${i + 1}</span>
+                        </div>
+                    </div>
+                    <div class="px-4 py-2 min-w-[250px] w-[250px] flex items-center justify-center">
+                        <div class="bg-red-500 w-full h-12 flex justify-center items-center rounded-xl text-white">
+                            <span>LANDED</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="px-4 pt-2 pb-4 w-full flex items-center gap-4 text-[18px] ${bgColor} pl-[116px] text-black">
+                
+                    <span class="bg-gray-200 flex items-center gap-2 rounded-xl overflow-hidden">
+                        <img src="/images/airport/EY_S.gif" alt="EY" class="w-20 h-10" /> 
+                        <a class="w-[100px] text-center">EY ${i + 1}${i + 2}${i + 1}${i + 3}</a>
+                    </span>
+                     <span class="bg-gray-200 flex items-center gap-2 rounded-xl overflow-hidden">
+                        <img src="/images/airport/EY_S.gif" alt="EY" class="w-20 h-10" /> 
+                        <a class="w-[100px] text-center">EY ${i + 1}${i + 2}${i + 1}${i + 3}</a>
+                    </span>
+                     <span class="bg-gray-200 flex items-center gap-2 rounded-xl overflow-hidden">
+                        <img src="/images/airport/EY_S.gif" alt="EY" class="w-20 h-10" /> 
+                        <a class="w-[100px] text-center">EY ${i + 1}${i + 2}${i + 1}${i + 3}</a>
+                    </span>
+                </span>
+                `;
+                tbody.appendChild(row);
+            }
+        }
+
+        renderRows();
+
+        let scrollPos = 0;
+        const scrollSpeed = 1; // scroll ลง
+        const scrollBackSpeed = 8; // scroll กลับขึ้น (ปรับได้)
+        const intervalTime = 50;
+
+        let isPaused = false;
+        let reachedBottom = false;
+        let isScrollingBack = false;
+
+        function scrollToTopSmooth(callback) {
+            isScrollingBack = true;
+
+            const interval = setInterval(() => {
+                if (scrollPos > 0) {
+                    scrollPos -= scrollBackSpeed;
+                    if (scrollPos < 0) scrollPos = 0;
+                    tbody.scrollTop = scrollPos;
+                } else {
+                    clearInterval(interval);
+                    isScrollingBack = false;
+                    callback();
+                }
+            }, intervalTime);
+        }
+
+        function autoScroll() {
+            if (isPaused || isScrollingBack) return;
+
+            scrollPos += scrollSpeed;
+
+            if (scrollPos >= tbody.scrollHeight - tbody.clientHeight && !reachedBottom) {
+                reachedBottom = true;
+                isPaused = true;
+
+                setTimeout(() => {
+                    // ค่อย ๆ scroll กลับขึ้น
+                    scrollToTopSmooth(() => {
+                        setTimeout(() => {
+                            isPaused = false;
+                            reachedBottom = false;
+                        }, 3000); // หยุด 3 วิหลังเลื่อนถึงบนสุด
+                    });
+                }, 3000); // หยุด 3 วิเมื่อถึงล่างสุด
+
+            } else {
+                tbody.scrollTop = scrollPos;
+            }
+        }
+
+        setInterval(autoScroll, intervalTime);
+    </script>
+
+</body>
+
+</html>

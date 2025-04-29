@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta th:name="'_csrf'" th:content="${_csrf.token}">
     <meta th:name="'_csrf_header'" th:content="${_csrf.headerName}" />
-    <title>Main Page</title>
+    <title>Management Page</title>
     <link th:href="@{/main.css}" rel="stylesheet" />
 </head>
 
@@ -145,6 +145,7 @@
 
 <!-- JavaScript -->
 <script>
+ 	
     function openModal() {
         document.getElementById('myModal').classList.remove('hidden');
     }

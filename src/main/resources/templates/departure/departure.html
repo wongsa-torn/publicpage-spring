@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta th:name="'_csrf'" th:content="${_csrf.token}">
+    <meta th:name="'_csrf_header'" th:content="${_csrf.headerName}" />
+    <title>Departure Page</title>
+    <link th:href="@{/main.css}" rel="stylesheet" />
+    <style>
+        tbody {
+            scroll-behavior: smooth;
+        }
+    </style>
+    <style>
+        /* ซ่อน scrollbar สำหรับ tbody */
+        #tableBody::-webkit-scrollbar {
+            display: none;
+        }
+
+        #tableBody {
+            -ms-overflow-style: none;
+            /* สำหรับ IE และ Edge */
+            scrollbar-width: none;
+            /* สำหรับ Firefox */
+        }
+    </style>
+    <style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            /* IE 10+ */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+    </style>
+
+</head>
+
+<body class="bg-gray-100 flex justify-center h-screen">
+    <div class="w-full bg-white">
+
+        <!-- <h1>Departure Flights</h1> -->
+        <div class="relative h-[7vh]">
+            <img class="w-full h-full" th:src="@{'/images/Departure.png'}" alt="Departure">
+
+            <form action="/departure" method="get">
+                <input type="hidden" name="type" value="flight" />
+                <select name="airportCode" onchange="this.form.submit()"
+                    class="absolute top-1.5 right-8 text-[36px] font-bold text-black">
+                    <option value="BKK" th:selected="${selectedAirport == 'BKK'}">BKK</option>
+                    <option value="DMK" th:selected="${selectedAirport == 'DMK'}">DMK</option>
+                    <option value="HKT" th:selected="${selectedAirport == 'HKT'}">HKT</option>
+                    <option value="HDY" th:selected="${selectedAirport == 'HDY'}">HDY</option>
+                    <option value="CNX" th:selected="${selectedAirport == 'CNX'}">CNX</option>
+                    <option value="CEI" th:selected="${selectedAirport == 'CEI'}">CEI</option>
+                </select>
+            </form>
+        </div>
+
+
+        <!-- Head Section -->
+        <div class="sticky top-0 grid grid-cols-12 font-bold text-[30px] bg-[#000033] text-white h-[6vh]">
+            <div class="col-span-1 p-2 text-center">Time</div>
+            <div class="col-span-1 p-2 text-center">Airlines</div>
+            <!-- <div class="col-span-3 p-2 text-left">To</div> -->
+            <div th:class="${type == 'flight'} ? 'col-span-3 p-2 text-left' : 'col-span-4 p-2 text-left'">
+                To
+            </div>
+            <div class="col-span-1 p-2 text-center">Flight</div>
+            <div class="col-span-1 p-2 text-center">Departs</div>
+            <!-- <div class="col-span-1 p-2 text-center">Row</div> -->
+            <div class="col-span-1 p-2 text-center" th:if="${type == 'flight'}">
+                Row
+            </div>
+            <div class="col-span-1 p-2 text-center">Gate</div>
+            <div class="col-span-3 p-2 text-center">Remark</div>
+        </div>
+
+        <!-- Body Section with Scroll -->
+
+
+
+        <div class="relative h-[83vh] overflow-hidden"> <!-- ความสูงที่ต้องการ -->
+            <div id="autoScrollContainer" class="h-full overflow-y-auto hide-scrollbar">
+                <!-- เปลี่ยน overflow เป็น auto -->
+                <div>
+                    <div class="table-body text-[28px]" th:each="departure, iterStat : ${departures}">
+                        <div id="scrollArea" class="">
+                            <div class="grid grid-cols-12"
+                                th:class="${iterStat.index % 2 == 0} ? 'grid grid-cols-12 bg-[#0D4294] text-white' : 'grid grid-cols-12 bg-[#000033] text-white'">
+                                <div class="col-span-1 p-2 text-center" th:text="${departure.timeDepart}"></div>
+                                <div class="col-span-1 flex items-center">
+                                    <img th:src="@{'/images/image/' + ${departure.airline} + '_S.gif'}"
+                                        alt="Airline Logo" class="w-[150px] max-h-[40px] h-full"
+                                        onerror="this.style.display='none'">
+                                </div>
+                                <!-- <div class="col-span-3 p-2 flex items-center justify-center"
+                                    th:text="${departure.flightTo}"></div> -->
+                                <div th:class="${type == 'flight'} ? 'col-span-3 p-2 flex items-center justify-center' : 'col-span-4 p-2 flex items-center justify-center'"
+                                    th:text="${departure.flightTo}">
+                                </div>
+                                <div class="col-span-1 p-2 flex items-center justify-center"
+                                    th:text="${departure.flight}">
+                                </div>
+                                <div class="col-span-1 p-2 flex items-center justify-center"
+                                    th:text="${departure.estimate}"></div>
+                                <!-- <div class="col-span-1 flex items-center justify-center text-[24px] font-bold">
+                                    <span class="text-center rowContainer" th:text="${departure.row}">
+                                    </span>
+                                </div> -->
+                                <div class="col-span-1 flex items-center justify-center text-[24px] font-bold"
+                                    th:if="${type == 'flight'}">
+                                    <span class="text-center rowContainer" th:text="${departure.row}"></span>
+                                </div>
+                                <div class="col-span-1 flex items-center justify-center text-[24px] font-bold">
+                                    <!-- กรณีมีข้อมูล -->
+                                    <span th:if="${departure.gate != null and !departure.gate.isEmpty()}"
+                                        class="text-center text-black bg-yellow-500 rounded-lg p-2"
+                                        th:text="${departure.gate}">
+                                    </span>
+                                    <!-- กรณีไม่มีข้อมูล -->
+                                    <span th:unless="${departure.gate != null and !departure.gate.isEmpty()}">
+                                        <!-- ไม่แสดงอะไรเลย หรือแสดง "-" -->
+                                    </span>
+                                </div>
+                                <!-- <div class="col-span-3 remark-container flex justify-center"
+                                    th:text="${departure.remark}">
+                                </div>
+                                <div class="col-span-3 remark-container flex justify-center"
+                                    th:text="${departure.statusGate}">
+                                </div> -->
+                                <div class="col-span-3 remark-container flex justify-center"
+                                    th:text="${type == 'flight'} ? ${departure.remark} : ${departure.statusGate}">
+                                </div>
+
+                                <div class="py-2 text-center col-start-2 col-span-12"
+                                    th:if="${departure.jfnoList != null and !#lists.isEmpty(departure.jfnoList)}">
+                                    <div class="mt-2 flex flex-wrap gap-2 justify-start">
+                                        <span th:each="jfHtml : ${departure.jfnoList}" th:utext="${jfHtml}"
+                                            class="bg-gray-200 text-gray-800 rounded-lg px-3 py-1 text-[20px] font-bold flex items-center">
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- <div class="sticky bottom-0">
+            <div class="h-[4vh] flex items-center px-4 bg-blue-400">
+                <span>Page Last Update On :21/04/2025 10:10 ( Total : 99 )</span>
+            </div>
+        </div> -->
+        <div class="h-[4vh] sticky bottom-0">
+            <div class="flex items-center px-4 bg-blue-400 h-full">
+                <span>
+                    Page Last Update On :
+                    <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}"></span>
+                    ( Total :
+                    <span th:text="${#lists.size(departures)}"></span>
+                    )
+                </span>
+            </div>
+        </div>
+
+</body>
+
+<!-- <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // สำหรับ remark ที่ได้จาก backend เช่น: "Ck-in Close|xxx|DELAYED|yyy|CANCELLED|zzz"
+        const remarkContainers = document.querySelectorAll('.remark-container');
+
+        const airportCode = new URLSearchParams(window.location.search).get("airportCode") || "BKK";
+
+        remarkContainers.forEach(function (container) {
+            const rawText = container.textContent || container.innerText;
+            if (!rawText || rawText.trim() === "") {
+                container.innerHTML = ""; // ไม่แสดงอะไรเลย
+                return;
+            }
+            const parts = rawText.split('|');
+            container.innerHTML = ''; // ล้างข้อความเก่า
+
+            // เงื่อนไขเลือกข้อความที่ต้องการ
+            const selected = [];
+
+            if (airportCode === "BKK") {
+                if (parts.length >= 3) {
+                    selected.push(parts[0].trim(), parts[2].trim());
+                } else if (parts.length >= 1 && parts[0].trim() !== "") {
+                    selected.push(parts[0].trim());
+                }
+            } else if (airportCode === "CNX") {
+                if (parts.length >= 4) {
+                    selected.push(parts[0].trim(), parts[3].trim());
+                } else if (parts.length >= 1 && parts[0].trim() !== "") {
+                    selected.push(parts[0].trim());
+                }
+            } else if (airportCode === "HKT") {
+                if (parts.length >= 4) {
+                    selected.push(parts[0].trim(), parts[3].trim());
+                } else if (parts.length >= 1 && parts[0].trim() !== "") {
+                    selected.push(parts[0].trim());
+                }
+            } else {
+                // default: แสดง part แรกถ้ามี
+                if (parts.length >= 1 && parts[0].trim() !== "") {
+                    selected.push(parts[0].trim());
+                }
+            }
+
+            // สร้าง <span> พร้อม class สำหรับแต่ละข้อความ
+            selected.forEach(function (text) {
+                const span = document.createElement('span');
+                span.textContent = text;
+                span.className = getRemarkClass(text); // ใช้ Tailwind class
+                container.appendChild(span);
+                container.appendChild(document.createTextNode(' '));
+            });
+        });
+
+        function getRemarkClass(text) {
+            switch (text) {
+                case "Ck-in Close":
+                    return "m-2 text-white px-2 py-1 text-[28px]";
+                case "DELAYED":
+                    return "m-2 bg-white text-black px-2 py-1 rounded text-[28px]";
+                case "CANCELLED":
+                    return "m-2 bg-blue-500 text-white px-2 py-1 rounded text-[28px]";
+                case "Ck-in Open":
+                    return "m-2 bg-green-600 text-white px-2 py-1 rounded text-[28px]";
+                case "DEPARTED":
+                    return "m-2 animate-pulse text-white px-2 py-1 rounded text-[28px]";
+                default:
+                    return "m-2 text-white px-2 py-1 rounded text-[28px] flex justify-between items-center";
+            }
+        }
+        // เลือกทุกๆ element ที่มี class "rowContainer"
+        var rowContainers = document.querySelectorAll('.rowContainer');
+        rowContainers.forEach(function (rowContainer) {
+            var rowText = rowContainer.textContent || rowContainer.innerText;
+            // ตรวจสอบว่ามีข้อความใน row หรือไม่
+            if (rowText.trim().length > 0) {
+                var items = rowText.split(',');  // แยกค่าด้วยเครื่องหมาย ,
+                rowContainer.innerHTML = '';  // เคลียร์เนื้อหาปัจจุบัน
+                // สร้าง <span> สำหรับแต่ละค่าที่แยกมา
+                items.forEach(function (item) {
+                    var span = document.createElement('span');
+                    span.className = "text-center text-black bg-white rounded-lg p-2";
+                    span.textContent = item.trim();  // เพิ่มข้อความใน <span>
+                    // เพิ่ม class ให้กับ <span>
+                    // เพิ่ม class ที่ต้องการ
+                    rowContainer.appendChild(span);  // เพิ่ม <span> ลงใน container
+                    rowContainer.appendChild(document.createTextNode(' '));  // เพิ่มช่องว่างหลัง <span> ทุกตัว
+                });
+            }
+        });
+    });
+
+</script>
+
+<script>
+    const scrollContainer = document.getElementById('autoScrollContainer');
+
+    const airportCode = new URLSearchParams(window.location.search).get("airportCode") || "BKK";
+
+    const scrollSpeedDown = 200;
+    const scrollSpeedUp = 100;
+
+    let direction = 1;
+    const delay = 3000;
+    let paused = false;
+
+    async function fetchDepartures() {
+        try {
+            const response = await fetch(`/departure?airportCode=${airportCode}&continue=` + Date.now());
+            const html = await response.text();
+
+            // สมมุติว่าข้อมูล table-body อยู่ใน response
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newContent = doc.querySelector('.table-body')?.parentElement;
+
+            if (newContent) {
+                scrollContainer.innerHTML = ''; // ล้างของเก่า
+                scrollContainer.appendChild(newContent);
+                console.log('✅ โหลดข้อมูลใหม่แล้ว');
+            }
+        } catch (err) {
+            console.error('❌ โหลดข้อมูลไม่สำเร็จ:', err);
+        }
+    }
+
+    function autoScroll() {
+        if (paused) return;
+        const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+        const currentScroll = scrollContainer.scrollTop;
+        if ((direction === 1 && currentScroll >= maxScroll) ||
+            (direction === -1 && currentScroll <= 0)) {
+            console.log("🛑 หยุดที่", currentScroll);
+            paused = true;
+
+            // โหลดข้อมูลใหม่เฉพาะตอนถึงขอบล่าง
+            if (direction === 1) {
+                setTimeout(() => {
+                    direction *= -1;
+                    paused = false;
+                    requestAnimationFrame(autoScroll);
+                }, delay);
+            } else {
+                fetchDepartures().then(() => {
+                    setTimeout(() => {
+                        direction *= -1;
+                        paused = false;
+                        requestAnimationFrame(autoScroll);
+                    }, delay);
+                });
+            }
+        } else {
+            const scrollStep = direction === 1 ? scrollSpeedDown : scrollSpeedUp;
+            scrollContainer.scrollTop += direction * scrollStep;
+            requestAnimationFrame(autoScroll);
+        }
+    }
+    setTimeout(() => {
+        requestAnimationFrame(autoScroll);
+    }, delay);
+</script> -->
+
+<!-- <script>
+    const scrollContainer = document.getElementById('autoScrollContainer');
+
+    // ความเร็ว (จำนวน pixel ต่อ frame)
+    const scrollSpeedDown = 200; // ลงเร็ว
+    const scrollSpeedUp = 200;   // ขึ้นช้า
+
+    let direction = 1; // 1 = ลง, -1 = ขึ้น
+    const delay = 3000;
+    let paused = false;
+
+    function autoScroll() {
+        if (paused) return;
+
+        const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+        const currentScroll = scrollContainer.scrollTop;
+
+        if ((direction === 1 && currentScroll >= maxScroll) ||
+            (direction === -1 && currentScroll <= 0)) {
+
+            console.log("🛑 Paused at", currentScroll);
+
+            paused = true;
+            setTimeout(() => {
+                direction *= -1; // เปลี่ยนทิศ
+                paused = false;
+                requestAnimationFrame(autoScroll);
+            }, delay);
+        } else {
+            const scrollStep = direction === 1 ? scrollSpeedDown : scrollSpeedUp;
+            scrollContainer.scrollTop += direction * scrollStep;
+            requestAnimationFrame(autoScroll);
+        }
+    }
+
+    // เริ่มเลื่อนหลังจากรอ 3 วินาที
+    setTimeout(() => {
+        requestAnimationFrame(autoScroll);
+    }, delay);
+</script> -->
+
+<script>
+    // const airportCode = new URLSearchParams(window.location.search).get("airportCode") || "BKK";
+    const params = new URLSearchParams(window.location.search);
+    const airportCode = params.get("airportCode") || "BKK";
+    const type = params.get("type") || "flight"; // เพิ่มบรรทัดนี้
+
+    const scrollContainer = document.getElementById('autoScrollContainer');
+
+    const scrollSpeedDown = 0.5;
+    const scrollSpeedUp = 1000;
+    let direction = 1;
+    const delay = 5000;
+    let paused = false;
+
+    document.addEventListener("DOMContentLoaded", function () {
+        renderRemarksAndRows(); // ✅ ทำงานตอนโหลดหน้า
+        setTimeout(() => {
+            requestAnimationFrame(autoScroll);
+        }, delay);
+    });
+
+    // async function fetchDepartures() {
+    //     try {
+    //         const response = await fetch(`/departure?airportCode=${airportCode}&continue=` + Date.now());
+    //         const html = await response.text();
+
+    //         const parser = new DOMParser();
+    //         const doc = parser.parseFromString(html, 'text/html');
+    //         const newContent = doc.querySelector('.table-body')?.parentElement;
+
+    //         if (newContent) {
+    //             scrollContainer.innerHTML = '';
+    //             scrollContainer.appendChild(newContent);
+    //             console.log('✅ โหลดข้อมูลใหม่แล้ว :', airportCode);
+
+    //             renderRemarksAndRows(); // ✅ เรียกหลังจากโหลดข้อมูลใหม่
+    //         }
+    //     } catch (err) {
+    //         console.error('❌ โหลดข้อมูลไม่สำเร็จ:', err);
+    //     }
+    // }
+
+    async function fetchDepartures() {
+        try {
+            const response = await fetch(`/departure?airportCode=${airportCode}&type=${type}&continue=` + Date.now());
+            const html = await response.text();
+
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newContent = doc.querySelector('.table-body')?.parentElement;
+
+            if (newContent) {
+                scrollContainer.innerHTML = '';
+                scrollContainer.appendChild(newContent);
+
+                // ✅ รอให้ DOM update แล้วค่อย scroll ไปล่างสุด
+                requestAnimationFrame(() => {
+                    // scrollContainer.scrollTop = scrollContainer.scrollHeight;
+                    scrollContainer.scrollTop = 0;
+                });
+
+                console.log('✅ โหลดข้อมูลใหม่และ scroll ล่างสุดแล้ว:', airportCode);
+                renderRemarksAndRows();
+            }
+        } catch (err) {
+            console.error('❌ โหลดข้อมูลไม่สำเร็จ:', err);
+        }
+    }
+
+    // function autoScroll() {
+    //     if (paused) return;
+    //     const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+    //     const currentScroll = scrollContainer.scrollTop;
+
+    //     if ((direction === 1 && currentScroll >= maxScroll) ||
+    //         (direction === -1 && currentScroll <= 0)) {
+    //         paused = true;
+
+    //         if (direction === 1) {
+    //             // setTimeout(() => {
+    //             //     direction *= -1;
+    //             //     paused = false;
+    //             //     requestAnimationFrame(autoScroll);
+    //             // }, delay);
+    //             fetchDepartures().then(() => {
+    //                 paused = false;
+    //                 requestAnimationFrame(autoScroll);
+    //             });
+    //         } else {
+    //             // fetchDepartures().then(() => {
+    //             //     setTimeout(() => {
+    //             //         direction *= -1;
+    //             //         paused = false;
+    //             //         requestAnimationFrame(autoScroll);
+    //             //     }, delay);
+    //             // });
+    //             setTimeout(() => {
+    //                 direction *= -1;
+    //                 paused = false;
+    //                 requestAnimationFrame(autoScroll);
+    //             }, delay);
+    //         }
+    //     } else {
+    //         const scrollStep = direction === 1 ? scrollSpeedDown : scrollSpeedUp;
+    //         scrollContainer.scrollTop += direction * scrollStep;
+    //         requestAnimationFrame(autoScroll);
+    //     }
+    // }
+
+    // function autoScroll() {
+    //     if (paused) return;
+
+    //     const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+    //     const currentScroll = scrollContainer.scrollTop;
+
+    //     if (direction === 1 && currentScroll >= maxScroll) {
+    //         paused = true;
+
+    //         fetchDepartures().then(() => {
+    //             setTimeout(() => {
+    //                 paused = false;
+    //                 requestAnimationFrame(autoScroll);
+    //             }, delay); // ✅ หน่วงก่อนเริ่ม scroll ใหม่
+    //         });
+
+    //     } else {
+    //         const scrollStep = scrollSpeedDown;
+    //         scrollContainer.scrollTop += scrollStep;
+    //         requestAnimationFrame(autoScroll);
+    //     }
+    // }
+
+    function autoScroll() {
+        if (paused) return;
+
+        const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+        const currentScroll = scrollContainer.scrollTop;
+
+        if (currentScroll >= maxScroll) {
+            paused = true;
+            // setTimeout(() => {
+            //     fetchDepartures().then(() => {
+            //         paused = false;
+            //         requestAnimationFrame(autoScroll);
+            //     });
+            // }, 5000);
+            fetchDepartures().then(() => {
+                // ✅ Delay 5 วิหลังโหลดข้อมูล
+                setTimeout(() => {
+                    paused = false;
+                    requestAnimationFrame(autoScroll);
+                }, 5000);
+            });
+        } else {
+            scrollContainer.scrollTop += scrollSpeedDown;
+            setTimeout(() => {
+                requestAnimationFrame(autoScroll);
+            }, 50); // ค่ามากขึ้น = ช้าลง เช่น 20, 30
+        }
+    }
+
+    function renderRemarksAndRows() {
+        const remarkContainers = document.querySelectorAll('.remark-container');
+
+        remarkContainers.forEach(function (container) {
+            const rawText = container.textContent || container.innerText;
+            if (!rawText || rawText.trim() === "") {
+                container.innerHTML = "";
+                return;
+            }
+            const parts = rawText.split('|');
+            container.innerHTML = '';
+            const selected = [];
+
+            if (airportCode === "BKK") {
+                if (parts.length >= 3) {
+                    selected.push(parts[0].trim(), parts[2].trim());
+                } else if (parts[0]?.trim()) {
+                    selected.push(parts[0].trim());
+                }
+            } else if (["CNX", "HKT"].includes(airportCode)) {
+                if (parts.length >= 4) {
+                    selected.push(parts[0].trim(), parts[3].trim());
+                } else if (parts[0]?.trim()) {
+                    selected.push(parts[0].trim());
+                }
+            } else {
+                if (parts[0]?.trim()) {
+                    selected.push(parts[0].trim());
+                }
+            }
+
+            selected.forEach(function (text) {
+                const span = document.createElement('span');
+                span.textContent = text;
+                span.className = getRemarkClass(text);
+                container.appendChild(span);
+                container.appendChild(document.createTextNode(' '));
+            });
+        });
+
+        document.querySelectorAll('.rowContainer').forEach(function (rowContainer) {
+            const rowText = rowContainer.textContent || rowContainer.innerText;
+            if (rowText.trim()) {
+                const items = rowText.split(',');
+                rowContainer.innerHTML = '';
+                items.forEach(function (item) {
+                    const span = document.createElement('span');
+                    span.className = "text-center text-black bg-white rounded-lg p-2";
+                    span.textContent = item.trim();
+                    rowContainer.appendChild(span);
+                    rowContainer.appendChild(document.createTextNode(' '));
+                });
+            }
+        });
+    }
+
+    function getRemarkClass(text) {
+        switch (text) {
+            case "Ck-in Close": return "m-2 text-white px-2 py-1 text-[28px]";
+            case "DELAYED": return "m-2 bg-white text-black px-2 py-1 rounded text-[28px]";
+            case "CANCELLED": return "m-2 bg-blue-500 text-white px-2 py-1 rounded text-[28px]";
+            case "Ck-in Open": return "m-2 bg-green-600 text-white px-2 py-1 rounded text-[28px]";
+            case "DEPARTED": return "m-2 animate-pulse text-white px-2 py-1 rounded text-[28px]";
+            default: return "m-2 text-white px-2 py-1 rounded text-[28px] flex justify-between items-center";
+        }
+    }
+</script>
+
+
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta th:name="'_csrf'" th:content="${_csrf.token}">
+    <meta th:name="'_csrf_header'" th:content="${_csrf.headerName}" />
+    <title>Qatar Page</title>
+    <link th:href="@{/main.css}" rel="stylesheet" />
+    <style>
+        tbody {
+            scroll-behavior: smooth;
+        }
+    </style>
+    <style>
+        /* ซ่อน scrollbar สำหรับ tbody */
+        #tableBody::-webkit-scrollbar {
+            display: none;
+        }
+
+        #tableBody {
+            -ms-overflow-style: none;
+            /* สำหรับ IE และ Edge */
+            scrollbar-width: none;
+            /* สำหรับ Firefox */
+        }
+    </style>
+    <style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            /* IE 10+ */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+    </style>
+
+</head>
+
+<body class="bg-gray-100 flex justify-center h-screen">
+    <div class="w-full bg-white">
+
+        <div class="bg-[#681A41] text-center text-[15px] lg:text-[30px] text-white h-auto border-b-[5px] border-b-[#84084A]">
+            <span>Departure Flights on <span id="updateDateText">-</span></span>
+        </div>
+
+
+        <!-- Head Section -->
+        <div class="sticky top-0 grid grid-cols-12 font-bold text-[10px] md:text-sm lg:text-lg bg-[#681A41] text-white">
+            <div class="col-span-2 p-2 text-center">Time</div>
+            <div class="col-span-2 p-2 text-center">Airline</div>
+            <div class="col-span-1 p-2 text-center">To</div>
+            <div class="col-span-1 p-2 text-center">Flight</div>
+            <div class="col-span-2 p-2 text-center">Estimated Time</div>
+            <div class="col-span-1 p-2 text-center">Gate</div>
+            <div class="col-span-3 p-2 text-center">Status</div>
+        </div>
+
+        <!-- Body Section -->
+
+        <div class="table-body text-[10px] lg:text-sm" th:each="qatar, iterStat : ${qatars}">
+            <div class="grid grid-cols-12"
+                th:class="${iterStat.index % 2 == 0} ? 'grid grid-cols-12 bg-[#84084A] text-white' : 'grid grid-cols-12 bg-[#681A41] text-white'">
+                <div class="col-span-2 p-2 flex items-center justify-center" th:text="${qatar.timeDepart}">
+                </div>
+                <div class="col-span-2 flex items-center">
+                    <img th:src="@{'/images/image/QR_L.gif'}" alt="Airline Logo" class="w-auto h-auto"
+                        onerror="this.style.display='none'">
+                </div>
+                <div class="col-span-1 p-2 flex items-center justify-start text-[10px] lg:text-[15px] font-bold"
+                    th:text="${qatar.flightTo}">
+                </div>
+                <div class="col-span-1 p-2 flex items-center justify-center text-[10px] lg:text-[15px] font-bold"
+                    th:text="${qatar.flight}">
+                </div>
+                <div class="col-span-2 p-2 flex items-center justify-center" th:text="${qatar.estimate}">
+                </div>
+                <div class="col-span-1 flex items-center justify-center font-bold ">
+                    <span th:if="${qatar.gate != null and !qatar.gate.isEmpty()}"
+                        class="text-center text-black bg-yellow-500 rounded-lg p-2" th:text="${qatar.gate}">
+                    </span>
+                    <span th:unless="${qatar.gate != null and !qatar.gate.isEmpty()}">
+                    </span>
+                </div>
+                <div class="col-span-3 remark-container  flex items-center justify-center gap-2 lg:gap-4" th:text="${qatar.status}">
+                </div>
+            </div>
+        </div>
+
+        <div class="h-[4vh] sticky bottom-0 bg-blue-400 flex items-center px-4 text-sm lg:text-[20px] font-bold">
+            <span id="updateTimeBar">
+                Page Last Update On :
+                <span id="updateTimeText">-</span>
+                ( Total : <span id="qatarCount">-</span> )
+            </span>
+        </div>
+
+</body>
+
+<script>
+    // const airportCode = new URLSearchParams(window.location.search).get("airportCode") || "BKK";
+    const params = new URLSearchParams(window.location.search);
+    const airportCode = params.get("airportCode") || "BKK";
+    const type = params.get("type") || "flight"; // เพิ่มบรรทัดนี้
+
+    const delay = 5000;
+
+    document.addEventListener("DOMContentLoaded", function () {
+        renderRemarksAndRows(); // ✅ ทำงานตอนโหลดหน้า
+        // setTimeout(() => {
+        //     requestAnimationFrame(autoScroll);
+        // }, delay);
+    });
+
+    function updateQatarStats() {
+        fetch('/qatar/stats')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('updateDateText').textContent = data.datestamp;
+                document.getElementById('updateTimeText').textContent = data.timestamp;
+                document.getElementById('qatarCount').textContent = data.count;
+            })
+
+            .catch(err => console.error("❌ อัปเดตข้อมูลล้มเหลว:", err));
+    }
+
+    // อัปเดตเมื่อโหลดหน้า
+    updateQatarStats();
+
+    // ตั้งเวลาให้รีเฟรชทุก 60 วินาที
+    setInterval(updateQatarStats, 60000);
+
+    function renderRemarksAndRows() {
+        const remarkContainers = document.querySelectorAll('.remark-container');
+
+        remarkContainers.forEach(function (container) {
+            const rawText = container.textContent || container.innerText;
+            if (!rawText || rawText.trim() === "") {
+                container.innerHTML = "";
+                return;
+            }
+            const parts = rawText.split('|');
+            container.innerHTML = '';
+            const selected = [];
+
+            if (airportCode === "BKK") {
+                if (parts.length >= 3) {
+                    selected.push(parts[0].trim(), parts[2].trim());
+                } else if (parts[0]?.trim()) {
+                    selected.push(parts[0].trim());
+                }
+            } else if (["CNX", "HKT"].includes(airportCode)) {
+                if (parts.length >= 4) {
+                    selected.push(parts[0].trim(), parts[3].trim());
+                } else if (parts[0]?.trim()) {
+                    selected.push(parts[0].trim());
+                }
+            } else {
+                if (parts[0]?.trim()) {
+                    selected.push(parts[0].trim());
+                }
+            }
+
+            selected.forEach(function (text) {
+                const span = document.createElement('span');
+                span.textContent = text;
+                span.className = getRemarkClass(text);
+                container.appendChild(span);
+                container.appendChild(document.createTextNode(' '));
+            });
+        });
+    }
+
+    function getRemarkClass(text) {
+        switch (text) {
+            case "FINAL CALL": return "p-1 w-auto min-h-[25px] animate-pulse bg-red-500 text-white rounded-lg text-[5px] md:text-[10px] lg:text-lg flex justify-between items-center";
+            case "NEW GATE": return "p-1 w-auto min-h-[25px] animate-pulse bg-sky-500 text-white rounded-lg text-[5px] md:text-[10px] lg:text-lg flex justify-between items-center";
+            case "DELAYED": return "p-1 w-auto min-h-[25px] bg-blue-500 text-white rounded-lg text-[5px] md:text-[10px] lg:text-lg flex justify-between items-center";
+            case "CANCELLED": return "p-1 w-auto min-h-[25px] bg-white text-black rounded-lg text-[5px] md:text-[10px] lg:text-lg flex justify-between items-center";
+            case "GATE OPEN": return "p-1 w-auto min-h-[25px] bg-green-500 text-white rounded-lg text-[5px] md:text-[10px] lg:text-lg flex justify-between items-center";
+            case "GATE CLOSED": return "p-1 w-auto min-h-[25px] bg-gray-500 text-white rounded-lg text-[5px] md:text-[10px] lg:text-lg flex justify-between items-center";
+            case "BOARDING": return "p-1 w-auto min-h-[25px] animate-pulse bg-yellow-500 text-white rounded-lg text-[5px] md:text-[10px] lg:text-lg flex justify-between items-center";
+            case "DEPARTED": return "p-1 w-auto min-h-[25px] bg-white text-black rounded-lg text-[5px] md:text-[10px] lg:text-lg flex justify-between items-center";
+            default: return "p-1 w-auto min-h-[25px] text-white rounded-lg text-[5px] md:text-[10px] lg:text-lg flex justify-between items-center";
+        }
+    }
+
+</script>
+
+
+</html>

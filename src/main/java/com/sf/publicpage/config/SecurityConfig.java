@@ -36,6 +36,8 @@ public class SecurityConfig {
                 // csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .authorizeHttpRequests(auth -> auth
 
+                        // .requestMatchers("/departure_flight").permitAll()
+
                         .requestMatchers("/main.css").permitAll()
 
                         // ✅ ฟอร์ม add และ save ใช้ POST

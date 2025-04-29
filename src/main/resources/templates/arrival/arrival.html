@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta th:name="'_csrf'" th:content="${_csrf.token}">
+    <meta th:name="'_csrf_header'" th:content="${_csrf.headerName}" />
+    <title>Arrival Page</title>
+    <link th:href="@{/main.css}" rel="stylesheet" />
+    <style>
+        tbody {
+            scroll-behavior: smooth;
+        }
+    </style>
+    <style>
+        /* ซ่อน scrollbar สำหรับ tbody */
+        #tableBody::-webkit-scrollbar {
+            display: none;
+        }
+
+        #tableBody {
+            -ms-overflow-style: none;
+            /* สำหรับ IE และ Edge */
+            scrollbar-width: none;
+            /* สำหรับ Firefox */
+        }
+    </style>
+    <style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            /* IE 10+ */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 flex justify-center h-screen">
+    <div class="w-full bg-white overflow-auto">
+
+        <!-- <h1>arrival Flights</h1> -->
+        <div class="relative h-[7vh]">
+            <img class="w-full h-full" th:src="@{'/images/Arrivals.png'}" alt="Arrival">
+            <form action="/arrival" method="get">
+                <select name="airportCode" onchange="this.form.submit()"
+                    class="absolute top-1.5 right-8 text-[36px] font-bold text-black">
+                    <option value="BKK" th:selected="${selectedAirport == 'BKK'}">BKK</option>
+                    <option value="DMK" th:selected="${selectedAirport == 'DMK'}">DMK</option>
+                    <option value="HKT" th:selected="${selectedAirport == 'HKT'}">HKT</option>
+                    <option value="HDY" th:selected="${selectedAirport == 'HDY'}">HDY</option>
+                    <option value="CNX" th:selected="${selectedAirport == 'CNX'}">CNX</option>
+                    <option value="CEI" th:selected="${selectedAirport == 'CEI'}">CEI</option>
+                </select>
+            </form>
+        </div>
+
+        <!-- Head Section -->
+        <div class="sticky top-0 grid grid-cols-12 font-bold text-[30px] bg-[#003300] text-white h-[6vh]">
+            <div class="col-span-1 p-2 text-center">Time</div>
+            <div class="col-span-1 p-2 text-center">Airlines</div>
+            <div class="col-span-3 p-2 text-left">From</div>
+            <div class="col-span-1 p-2 text-center">Flight</div>
+            <div class="col-span-1 p-2 text-center">Arrives</div>
+            <div class="col-span-1 p-2 text-center">Row</div>
+            <!-- <div class="col-span-1 p-2 text-center">Gate</div> -->
+            <div class="col-span-3 p-2 text-center">Remark</div>
+        </div>
+
+        <!-- Body Section with Scroll -->
+        <div class="relative h-[83vh] overflow-hidden"> <!-- ความสูงที่ต้องการ -->
+            <div id="autoScrollContainer" class="h-full overflow-y-auto hide-scrollbar">
+                <!-- เปลี่ยน overflow เป็น auto -->
+                <div>
+                    <div class="table-body text-[28px]" th:each="arrival, iterStat : ${arrivals}">
+                        <!-- max-h-72 = 18rem for scroll -->
+                        <div id="scrollArea" class="">
+                            <div class="grid grid-cols-12"
+                                th:class="${iterStat.index % 2 == 0} ? 'grid grid-cols-12 bg-[#2F7D17] text-white' : 'grid grid-cols-12 bg-[#003300] text-white'">
+                                <div class="col-span-1 p-2 text-center" th:text="${arrival.timeArrival}"></div>
+
+                                <div class="col-span-1 flex items-center">
+                                    <img th:src="@{'/images/image/' + ${arrival.airline} + '_S.gif'}" alt="Airline Logo"
+                                        class="w-[150px] max-h-[40px] h-full" onerror="this.style.display='none'">
+                                </div>
+                                <div class="col-span-3 p-2 flex items-center justify-center"
+                                    th:text="${arrival.flightFrom}">
+                                </div>
+                                <div class="col-span-1 p-2 flex items-center justify-center"
+                                    th:text="${arrival.flight}">
+                                </div>
+                                <div class="col-span-1 p-2 flex items-center justify-center"
+                                    th:text="${arrival.estimate}">
+                                </div>
+                                <div class="col-span-1 flex items-center justify-center text-[24px] font-bold">
+                                    <span class="text-center rowContainer" th:text="${arrival.belt}">
+                                    </span>
+                                </div>
+
+                                <div class="col-span-3 remark-container flex justify-center"
+                                    th:text="${arrival.remark}">
+                                </div>
+                                <div class="py-2 text-center col-start-2 col-span-12"
+                                    th:if="${arrival.jfnoList != null and !#lists.isEmpty(arrival.jfnoList)}">
+                                    <div class="mt-2 flex flex-wrap gap-2 justify-start">
+                                        <span th:each="jfHtml : ${arrival.jfnoList}" th:utext="${jfHtml}"
+                                            class="bg-gray-200 text-gray-800 rounded-lg px-3 py-1 text-[20px] font-bold flex items-center">
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="h-[4vh] sticky bottom-0">
+            <div class="flex items-center px-4 bg-blue-400 h-full">
+                <span>
+                    Page Last Update On :
+                    <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}"></span>
+                    ( Total :
+                    <span th:text="${#lists.size(arrivals)}"></span>
+                    )
+                </span>
+            </div>
+        </div>
+
+</body>
+
+<script>
+    const airportCode = new URLSearchParams(window.location.search).get("airportCode") || "BKK";
+    const scrollContainer = document.getElementById('autoScrollContainer');
+
+    const scrollSpeedDown = 0.5;
+    const scrollSpeedUp = 1000;
+    let direction = 1;
+    const delay = 5000;
+    let paused = false;
+
+    document.addEventListener("DOMContentLoaded", function () {
+        renderRemarksAndRows(); // ✅ ทำงานตอนโหลดหน้า
+        setTimeout(() => {
+            requestAnimationFrame(autoScroll);
+        }, delay);
+    });
+
+    async function fetchArrivals() {
+        try {
+            const response = await fetch(`/arrival?airportCode=${airportCode}&continue=` + Date.now());
+            const html = await response.text();
+
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newContent = doc.querySelector('.table-body')?.parentElement;
+
+            if (newContent) {
+                scrollContainer.innerHTML = '';
+                scrollContainer.appendChild(newContent);
+
+                // ✅ รอให้ DOM update แล้วค่อย scroll ไปล่างสุด
+                requestAnimationFrame(() => {
+                    // scrollContainer.scrollTop = scrollContainer.scrollHeight;
+                    scrollContainer.scrollTop = 0;
+                });
+
+                console.log('✅ โหลดข้อมูลใหม่และ scroll ล่างสุดแล้ว:', airportCode);
+                renderRemarksAndRows();
+            }
+        } catch (err) {
+            console.error('❌ โหลดข้อมูลไม่สำเร็จ:', err);
+        }
+    }
+
+    function autoScroll() {
+        if (paused) return;
+
+        const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+        const currentScroll = scrollContainer.scrollTop;
+
+        if (currentScroll >= maxScroll) {
+            paused = true;
+            // setTimeout(() => {
+            //     fetchArrivals().then(() => {
+            //         paused = false;
+            //         requestAnimationFrame(autoScroll);
+            //     });
+            // }, 5000);
+            fetchArrivals().then(() => {
+                // ✅ Delay 5 วิหลังโหลดข้อมูล
+                setTimeout(() => {
+                    paused = false;
+                    requestAnimationFrame(autoScroll);
+                }, 5000);
+            });
+        } else {
+            scrollContainer.scrollTop += scrollSpeedDown;
+            setTimeout(() => {
+                requestAnimationFrame(autoScroll);
+            }, 50); // ค่ามากขึ้น = ช้าลง เช่น 20, 30
+        }
+    }
+
+    function renderRemarksAndRows() {
+        const remarkContainers = document.querySelectorAll('.remark-container');
+
+        remarkContainers.forEach(function (container) {
+            const rawText = container.textContent || container.innerText;
+            if (!rawText || rawText.trim() === "") {
+                container.innerHTML = "";
+                return;
+            }
+            const parts = rawText.split('|');
+            container.innerHTML = '';
+            const selected = [];
+
+            if (airportCode === "BKK") {
+                if (parts.length >= 3) {
+                    selected.push(parts[0].trim(), parts[2].trim());
+                } else if (parts.length >= 1 && parts[0].trim() !== "") {
+                    selected.push(parts[0].trim());
+                }
+            } else if (airportCode === "CNX") {
+                if (parts.length >= 4) {
+                    selected.push(parts[0].trim(), parts[3].trim());
+                } else if (parts.length >= 1 && parts[0].trim() !== "") {
+                    selected.push(parts[0].trim());
+                }
+            } else if (airportCode === "HKT") {
+                if (parts.length >= 4) {
+                    selected.push(parts[0].trim(), parts[3].trim());
+                } else if (parts.length >= 1 && parts[0].trim() !== "") {
+                    selected.push(parts[0].trim());
+                }
+            } else {
+                // default: แสดง part แรกถ้ามี
+                if (parts.length >= 1 && parts[0].trim() !== "") {
+                    selected.push(parts[0].trim());
+                }
+            }
+
+            selected.forEach(function (text) {
+                const span = document.createElement('span');
+                span.textContent = text;
+                span.className = getRemarkClass(text);
+                container.appendChild(span);
+                container.appendChild(document.createTextNode(' '));
+            });
+        });
+
+        document.querySelectorAll('.rowContainer').forEach(function (rowContainer) {
+            const rowText = rowContainer.textContent || rowContainer.innerText;
+            if (rowText.trim()) {
+                const items = rowText.split(',');
+                rowContainer.innerHTML = '';
+                items.forEach(function (item) {
+                    const span = document.createElement('span');
+                    span.className = "text-center text-black bg-white rounded-lg p-2";
+                    span.textContent = item.trim();
+                    rowContainer.appendChild(span);
+                    rowContainer.appendChild(document.createTextNode(' '));
+                });
+            }
+        });
+    }
+
+    function getRemarkClass(text) {
+        switch (text) {
+            case "Ck-in Close":
+                return "m-2 text-white px-2 py-1 text-[28px]";
+            case "DELAYED":
+                return "m-2 bg-white text-black px-2 py-1 rounded text-[28px]";
+            case "CANCELLED":
+                return "m-2 bg-blue-500 text-white px-2 py-1 rounded text-[28px]";
+            case "Ck-in Open":
+                return "m-2 bg-green-600 text-white px-2 py-1 rounded text-[28px]";
+            case "DEPARTED":
+                return "m-2 animate-pulse text-white px-2 py-1 rounded text-[28px]";
+            case "LANDED":
+                return "m-2 bg-red-500 text-white px-2 py-1 rounded text-[28px]";
+            case "CONFIRMED":
+                return "m-2 bg-gray-700 text-white px-2 py-1 rounded text-[28px]";
+
+            default:
+                return "m-2 text-white px-2 py-1 rounded text-[28px] flex justify-between items-center";
+        }
+    }
+</script>
+
+</html>
