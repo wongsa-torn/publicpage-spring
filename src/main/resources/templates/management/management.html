@@ -65,8 +65,11 @@
                                 <th class="text-md p-4 text-left">Airport</th>
                                 <th class="text-md p-4 w-full">Remark</th>
                                 <th colspan="2" class="">
+                                    <!-- <button class="p-1 hover:scale-110 transition-transform duration-150" title="Add"
+                                        onclick="openModal(); loadUserForm('new')"> -->
                                     <button class="p-1 hover:scale-110 transition-transform duration-150" title="Add"
-                                        onclick="openModal(); loadUserForm('new')">
+                                        th:attr="hx-get=@{/management/add}" hx-target="#modalFormContainer"
+                                        hx-swap="innerHTML" onclick="openModal()">
                                         <svg class="w-8 h-8 fill-[#1C2E45] hover:fill-green-500 hover:opacity-100 opacity-60 transition-colors duration-200"
                                             viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M12 5H7V0H5V5H0V7H5V12H7V7H12V5Z" />
@@ -144,7 +147,7 @@
 </body>
 
 <!-- JavaScript -->
-<script>
+<!-- <script>
  	
     function openModal() {
         document.getElementById('myModal').classList.remove('hidden');
@@ -169,7 +172,41 @@
         openModal();
     }
 
+</script> -->
+<script>
+    // const contextPath = window.location.pathname.split('/')[1] ? '/' + window.location.pathname.split('/')[1] : '';
+    const contextPath = window.location.origin + (window.location.pathname.split('/')[1] ? '/' + window.location.pathname.split('/')[1] : '');
+
+    function openModal() {
+        document.getElementById('myModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+        document.getElementById('myModal').classList.add('hidden');
+    }
+
+    function loadUserForm(username) {
+        const container = document.getElementById('modalFormContainer');
+        const modalTitle = document.getElementById('modalTitle');
+
+        if (username === 'new') {
+            modalTitle.innerText = 'Add New User';
+            htmx.ajax('GET', contextPath + '/management/add', {
+                target: container,
+                swap: 'innerHTML'
+            });
+        } else {
+            modalTitle.innerText = 'Edit User';
+            htmx.ajax('GET', `${contextPath}/management/edit/${username}`, {
+                target: container,
+                swap: 'innerHTML'
+            });
+        }
+
+        openModal();
+    }
 </script>
+
 <script>
     document.addEventListener("htmx:configRequest", function (event) {
         var token = document.querySelector("meta[name='_csrf']").content;

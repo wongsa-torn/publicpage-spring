@@ -1,7 +1,8 @@
 <!-- templates/management/user-form.html -->
 
 <div th:fragment="userForm">
-    <form th:action="${user.username != null ? '/management/update' : '/management/save'}" method="post">
+    <!-- <form th:action="${user.username != null ? '/management/update' : '/management/save'}" method="post"> -->
+    <form th:action="@{${user.username != null} ? '/management/update' : '/management/save'}" method="post">
         <div class="mb-2">
             <label class="block text-gray-700">Username:</label>
             <input type="text" name="username" th:value="${user.username}"

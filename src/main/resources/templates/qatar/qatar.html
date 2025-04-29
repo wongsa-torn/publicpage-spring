@@ -44,7 +44,8 @@
 <body class="bg-gray-100 flex justify-center h-screen">
     <div class="w-full bg-white">
 
-        <div class="bg-[#681A41] text-center text-[15px] lg:text-[30px] text-white h-auto border-b-[5px] border-b-[#84084A]">
+        <div
+            class="bg-[#681A41] text-center text-[15px] lg:text-[30px] text-white h-auto border-b-[5px] border-b-[#84084A]">
             <span>Departure Flights on <span id="updateDateText">-</span></span>
         </div>
 
@@ -86,7 +87,8 @@
                     <span th:unless="${qatar.gate != null and !qatar.gate.isEmpty()}">
                     </span>
                 </div>
-                <div class="col-span-3 remark-container  flex items-center justify-center gap-2 lg:gap-4" th:text="${qatar.status}">
+                <div class="col-span-3 remark-container  flex items-center justify-center gap-2 lg:gap-4"
+                    th:text="${qatar.status}">
                 </div>
             </div>
         </div>
@@ -103,6 +105,8 @@
 
 <script>
     // const airportCode = new URLSearchParams(window.location.search).get("airportCode") || "BKK";
+    const contextPath = window.location.origin + (window.location.pathname.split('/')[1] ? '/' + window.location.pathname.split('/')[1] : '');
+
     const params = new URLSearchParams(window.location.search);
     const airportCode = params.get("airportCode") || "BKK";
     const type = params.get("type") || "flight"; // เพิ่มบรรทัดนี้
@@ -118,6 +122,7 @@
 
     function updateQatarStats() {
         fetch('/qatar/stats')
+        // fetch(`${contextPath}/qatar/stats`)
             .then(res => res.json())
             .then(data => {
                 document.getElementById('updateDateText').textContent = data.datestamp;

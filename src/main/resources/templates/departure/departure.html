@@ -48,8 +48,9 @@
         <div class="relative h-[7vh]">
             <img class="w-full h-full" th:src="@{'/images/Departure.png'}" alt="Departure">
 
-            <form action="/departure" method="get">
-                <input type="hidden" name="type" value="flight" />
+            <form th:action="@{/departure}" method="get">
+                <!-- <input type="hidden" name="type" value="flight" /> -->
+                <input type="hidden" name="type" th:value="${type}" />
                 <select name="airportCode" onchange="this.form.submit()"
                     class="absolute top-1.5 right-8 text-[36px] font-bold text-black">
                     <option value="BKK" th:selected="${selectedAirport == 'BKK'}">BKK</option>
@@ -380,6 +381,8 @@
 
 <script>
     // const airportCode = new URLSearchParams(window.location.search).get("airportCode") || "BKK";
+    const contextPath = window.location.origin + (window.location.pathname.split('/')[1] ? '/' + window.location.pathname.split('/')[1] : '');
+
     const params = new URLSearchParams(window.location.search);
     const airportCode = params.get("airportCode") || "BKK";
     const type = params.get("type") || "flight"; // เพิ่มบรรทัดนี้
@@ -422,7 +425,11 @@
 
     async function fetchDepartures() {
         try {
-            const response = await fetch(`/departure?airportCode=${airportCode}&type=${type}&continue=` + Date.now());
+            // const response = await fetch(`${contextPath}/departure?airportCode=${airportCode}&type=${type}&continue=` + Date.now());
+            // แบบ ทดสอบ
+            const response = await fetch(`/departure?airportCode=${airportCode}&continue=` + Date.now());
+            // แบบ ใช้จริง
+            //const response = await fetch(`${contextPath}/departure?airportCode=${airportCode}&type=${type}&continue=` + Date.now());
             const html = await response.text();
 
             const parser = new DOMParser();
