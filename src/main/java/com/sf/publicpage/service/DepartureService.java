@@ -86,6 +86,8 @@ public class DepartureService {
                     obj.setTimeDepart(depdata.path("STD").asText());
                     obj.setEstimate(depdata.path("ETD").asText());
 
+                    obj.setDomint(depdata.path("DOMINT").asText());
+
                     // ตรวจสอบค่าของ jfno
                     String JFNO = depdata.path("JFNO").asText();
                     if (!JFNO.isEmpty()) {

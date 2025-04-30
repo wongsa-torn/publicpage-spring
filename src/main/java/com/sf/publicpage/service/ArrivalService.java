@@ -74,7 +74,9 @@ public class ArrivalService {
                     // obj.setGate(arrdata.path("GATE").asText());
                     obj.setTimeArrival(arrdata.path("STA").asText());
                     obj.setEstimate(arrdata.path("ETA").asText());
-
+                    
+                    obj.setDomint(arrdata.path("DOMINT").asText());
+                    
                     // ตรวจสอบค่าของ jfno
                     String JFNO = arrdata.path("JFNO").asText();
                     if (!JFNO.isEmpty()) {

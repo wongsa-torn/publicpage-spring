@@ -48,8 +48,7 @@
         <div class="relative h-[7vh]">
             <img class="w-full h-full" th:src="@{'/images/Departure.png'}" alt="Departure">
 
-            <form th:action="@{/departure}" method="get">
-                <!-- <input type="hidden" name="type" value="flight" /> -->
+            <!-- <form th:action="@{/departure}" method="get">
                 <input type="hidden" name="type" th:value="${type}" />
                 <select name="airportCode" onchange="this.form.submit()"
                     class="absolute top-1.5 right-8 text-[36px] font-bold text-black">
@@ -60,9 +59,29 @@
                     <option value="CNX" th:selected="${selectedAirport == 'CNX'}">CNX</option>
                     <option value="CEI" th:selected="${selectedAirport == 'CEI'}">CEI</option>
                 </select>
-            </form>
-        </div>
+            </form> -->
 
+            <div class="absolute top-1 right-8 text-[38px] font-bold text-white flex">
+                <form id="filterForm" th:action="@{/departure}" method="get" class="flex gap-6">
+                    <input type="hidden" name="type" th:value="${type}" />
+                    <select name="domintCode" class="bg-transparent" onchange="submitFilters()">
+                        <option class="text-black"value="ALL" th:selected="${selectedDomint == 'ALL'}">All</option>
+                        <option class="text-black"value="I" th:selected="${selectedDomint == 'I'}">International</option>
+                        <option class="text-black"value="D" th:selected="${selectedDomint == 'D'}">Domestic</option>
+                    </select>
+
+                    <select name="airportCode" class="bg-transparent" onchange="submitFilters()">
+                        <option class="text-black"value="BKK" th:selected="${selectedAirport == 'BKK'}">BKK</option>
+                        <option class="text-black"value="DMK" th:selected="${selectedAirport == 'DMK'}">DMK</option>
+                        <option class="text-black"value="HKT" th:selected="${selectedAirport == 'HKT'}">HKT</option>
+                        <option class="text-black"value="HDY" th:selected="${selectedAirport == 'HDY'}">HDY</option>
+                        <option class="text-black"value="CNX" th:selected="${selectedAirport == 'CNX'}">CNX</option>
+                        <option class="text-black"value="CEI" th:selected="${selectedAirport == 'CEI'}">CEI</option>
+                    </select>
+                </form>
+            </div>
+
+        </div>
 
         <!-- Head Section -->
         <div class="sticky top-0 grid grid-cols-12 font-bold text-[30px] bg-[#000033] text-white h-[6vh]">
@@ -377,11 +396,16 @@
 </script> -->
 
 <script>
+    function submitFilters() {
+        document.getElementById('filterForm').submit();
+    }
     // const airportCode = new URLSearchParams(window.location.search).get("airportCode") || "BKK";
     const contextPath = window.location.origin + (window.location.pathname.split('/')[1] ? '/' + window.location.pathname.split('/')[1] : '');
 
     const params = new URLSearchParams(window.location.search);
+
     const airportCode = params.get("airportCode") || "BKK";
+    const domintCode = new URLSearchParams(window.location.search).get("domintCode") || ""; // "" = แสดงทั้งหมด
     const type = params.get("type") || "flight"; // เพิ่มบรรทัดนี้
 
     const scrollContainer = document.getElementById('autoScrollContainer');
@@ -424,9 +448,9 @@
         try {
             // const response = await fetch(`${contextPath}/departure?airportCode=${airportCode}&type=${type}&continue=` + Date.now());
             // แบบ ทดสอบ
-            const response = await fetch(`/departure?airportCode=${airportCode}&continue=` + Date.now());
+            const response = await fetch(`/departure?airportCode=${airportCode}&domintCode=${domintCode}&type=${type}&continue=` + Date.now());
             // แบบ ใช้จริง
-            // const response = await fetch(`${contextPath}/departure?airportCode=${airportCode}&type=${type}&continue=` + Date.now());
+            // const response = await fetch(`${contextPath}/departure?airportCode=${airportCode}&domintCode=${domintCode}&type=${type}&continue=` + Date.now());
             const html = await response.text();
 
             const parser = new DOMParser();

@@ -45,81 +45,62 @@
 
         <!-- <h1>arrival Flights</h1> -->
         <div class="relative h-[7vh]">
-            <img class="w-full h-full" th:src="@{'/images/Arrivals.png'}" alt="Arrival">
+            <img class="w-full h-full" th:src="@{'/images/banner/2.png'}" alt="Arrival">
+            <form th:action="@{/arrival}" method="get">
+                <select name="airportCode" onchange="this.form.submit()"
+                    class="absolute top-0 right-10 text-[50px] font-bold text-white p-1 w-[350px] bg-transparent">
+                    <option class="text-black" value="BKK" th:selected="${selectedAirport == 'BKK'}">Suvarnabhumi
+                    </option>
+                    <option class="text-black" value="DMK" th:selected="${selectedAirport == 'DMK'}">DMK</option>
+                    <option class="text-black" value="HKT" th:selected="${selectedAirport == 'HKT'}">HKT</option>
+                    <option class="text-black" value="HDY" th:selected="${selectedAirport == 'HDY'}">HDY</option>
+                    <option class="text-black" value="CNX" th:selected="${selectedAirport == 'CNX'}">CNX</option>
+                    <option class="text-black" value="CEI" th:selected="${selectedAirport == 'CEI'}">CEI</option>
+                </select>
+            </form>
+        </div>
 
-            <div class="absolute top-1.5  right-8 text-[36px] font-bold text-white flex gap-4 ">
-                <!-- <form th:action="@{/arrival}" method="get">
-                    <select name="domintCode" onchange="this.form.submit()" class="bg-transparent">
-                        <option value="" th:selected="${selectedDomint == null or selectedDomint == ''}">All</option>
-                        <option value="I" th:selected="${selectedDomint == 'I'}">Inter</option>
-                        <option value="D" th:selected="${selectedDomint == 'D'}">Dom</option>
-                    </select>
-                </form>
-                <form th:action="@{/arrival}" method="get">
-                    <select name="airportCode" onchange="this.form.submit()" class="bg-transparent">
-                        <option value="BKK" th:selected="${selectedAirport == 'BKK'}">BKK</option>
-                        <option value="DMK" th:selected="${selectedAirport == 'DMK'}">DMK</option>
-                        <option value="HKT" th:selected="${selectedAirport == 'HKT'}">HKT</option>
-                        <option value="HDY" th:selected="${selectedAirport == 'HDY'}">HDY</option>
-                        <option value="CNX" th:selected="${selectedAirport == 'CNX'}">CNX</option>
-                        <option value="CEI" th:selected="${selectedAirport == 'CEI'}">CEI</option>
-                    </select>
-                </form> -->
-                <form id="filterForm" th:action="@{/arrival}" method="get" class="flex gap-6">
-                    <select name="domintCode" class="bg-transparent" onchange="submitFilters()">
-                        <option class="text-black" value="ALL" th:selected="${selectedDomint == 'ALL'}">All</option>
-                        <option class="text-black" value="I" th:selected="${selectedDomint == 'I'}">International
-                        </option>
-                        <option class="text-black" value="D" th:selected="${selectedDomint == 'D'}">Domestic</option>
-                    </select>
-                    <select name="airportCode" class="bg-transparent" onchange="submitFilters()">
-                        <option class="text-black" value="BKK" th:selected="${selectedAirport == 'BKK'}">BKK</option>
-                        <option class="text-black" value="DMK" th:selected="${selectedAirport == 'DMK'}">DMK</option>
-                        <option class="text-black" value="HKT" th:selected="${selectedAirport == 'HKT'}">HKT</option>
-                        <option class="text-black" value="HDY" th:selected="${selectedAirport == 'HDY'}">HDY</option>
-                        <option class="text-black" value="CNX" th:selected="${selectedAirport == 'CNX'}">CNX</option>
-                        <option class="text-black" value="CEI" th:selected="${selectedAirport == 'CEI'}">CEI</option>
-                    </select>
-                </form>
+        <!-- Head Section -->
+        <div class="sticky top-0 grid grid-cols-12 font-bold text-[40px] bg-green-900 text-white h-[7vh]">
+            <div class="col-span-1 p-2 text-center">Time</div>
+            <div class="col-span-11 grid grid-cols-12">
+                <div class="col-span-2 p-2 text-center">Airlines</div>
+                <div class="col-span-3 p-2 text-left">From</div>
+                <div class="col-span-2 p-2 text-center">Flight</div>
+                <div class="col-span-1 p-2 text-center">Arrives</div>
+                <div class="col-span-1 p-2 text-center">Row</div>
+                <!-- <div class="col-span-1 p-2 text-center">Gate</div> -->
+                <div class="col-span-3 p-2 text-center">Remark</div>
             </div>
 
         </div>
 
-        <!-- Head Section -->
-        <div class="sticky top-0 grid grid-cols-12 font-bold text-[30px] bg-[#003300] text-white h-[6vh]">
-            <div class="col-span-1 p-2 text-center">Time</div>
-            <div class="col-span-1 p-2 text-center">Airlines</div>
-            <div class="col-span-3 p-2 text-left">From</div>
-            <div class="col-span-1 p-2 text-center">Flight</div>
-            <div class="col-span-1 p-2 text-center">Arrives</div>
-            <div class="col-span-1 p-2 text-center">Row</div>
-            <!-- <div class="col-span-1 p-2 text-center">Gate</div> -->
-            <div class="col-span-3 p-2 text-center">Remark</div>
-        </div>
-
         <!-- Body Section with Scroll -->
-        <div class="relative h-[83vh] overflow-hidden"> <!-- ความสูงที่ต้องการ -->
+        <div class="relative h-[82vh] overflow-hidden"> <!-- ความสูงที่ต้องการ -->
             <div id="autoScrollContainer" class="h-full overflow-y-auto hide-scrollbar">
                 <!-- เปลี่ยน overflow เป็น auto -->
                 <div>
                     <div class="table-body text-[28px]" th:each="arrival, iterStat : ${arrivals}">
                         <!-- max-h-72 = 18rem for scroll -->
-                        <div id="scrollArea" class="">
-                            <div class="grid grid-cols-12"
-                                th:class="${iterStat.index % 2 == 0} ? 'grid grid-cols-12 bg-[#2F7D17] text-white' : 'grid grid-cols-12 bg-[#003300] text-white'">
-                                <div class="col-span-1 p-2 text-center" th:text="${arrival.timeArrival}"></div>
-
-                                <div class="col-span-1 flex items-center">
+                        <div id="scrollArea" class="grid grid-cols-12">
+                            <div class="col-span-1 p-2"
+                                th:class="${iterStat.index % 2 == 0} ? 'bg-green-500 text-white flex items-center justify-center' : 'bg-green-700 text-white flex items-center justify-center'">
+                                <span class="bg-yellow-500 p-1 rounded-lg text-black font-bold"
+                                    th:text="${arrival.timeArrival}"></span>
+                            </div>
+                            <div class="w-full grid grid-cols-11 font-bold"
+                                th:class="${iterStat.index % 2 == 0} ? 'grid grid-cols-12 bg-green-500 text-white col-span-11 ' : 'grid grid-cols-12 bg-green-700 text-white col-span-11 '">
+                                <div class="col-span-2 flex items-center">
                                     <img th:src="@{'/images/image/' + ${arrival.airline} + '_S.gif'}" alt="Airline Logo"
                                         class="w-[150px] max-h-[40px] h-full" onerror="this.style.display='none'">
                                 </div>
-                                <div class="col-span-3 p-2 flex items-center justify-center"
+                                <div class="col-span-2 p-2 flex items-center justify-center font-bold"
                                     th:text="${arrival.flightFrom}">
                                 </div>
-                                <!-- <div class="col-span-1 p-2 flex items-center justify-center"
+                                <div class="col-span-1 p-2 flex items-center justify-center font-bold"
                                     th:text="${arrival.domint}">
-                                </div> -->
-                                <div class="col-span-1 p-2 flex items-center justify-center"
+                                </div>
+                                <div class="col-span-2 p-2 flex items-center justify-center"
                                     th:text="${arrival.flight}">
                                 </div>
                                 <div class="col-span-1 p-2 flex items-center justify-center"
@@ -133,7 +114,7 @@
                                 <div class="col-span-3 remark-container flex justify-center"
                                     th:text="${arrival.remark}">
                                 </div>
-                                <div class="py-2 text-center col-start-2 col-span-12"
+                                <div class="py-2 text-center col-span-12"
                                     th:if="${arrival.jfnoList != null and !#lists.isEmpty(arrival.jfnoList)}">
                                     <div class="mt-2 flex flex-wrap gap-2 justify-start">
                                         <span th:each="jfHtml : ${arrival.jfnoList}" th:utext="${jfHtml}"
@@ -148,7 +129,7 @@
             </div>
         </div>
         <!-- <a th:href="@{/}" class="text-blue-500 hover:underline">กลับไปหน้าแรก</a> -->
-        <div class="h-[4vh] sticky bottom-0">
+        <div class="h-[4vh] sticky bottom-0 text-[24px]">
             <div class="flex items-center px-4 bg-blue-400 h-full">
                 <span>
                     Page Last Update On :
@@ -163,15 +144,10 @@
 </body>
 
 <script>
-    function submitFilters() {
-        document.getElementById('filterForm').submit();
-    }
+
     const contextPath = window.location.origin + (window.location.pathname.split('/')[1] ? '/' + window.location.pathname.split('/')[1] : '');
 
     const airportCode = new URLSearchParams(window.location.search).get("airportCode") || "BKK";
-
-    const domintCode = new URLSearchParams(window.location.search).get("domintCode") || ""; // "" = แสดงทั้งหมด
-
     const scrollContainer = document.getElementById('autoScrollContainer');
 
     const scrollSpeedDown = 0.5;
@@ -190,10 +166,9 @@
     async function fetchArrivals() {
         try {
             // แบบ ทดสอบ
-            // const response = await fetch(`/arrival?airportCode=${airportCode}&domintCode=${domintCode}&continue=` + Date.now());
-            const response = await fetch(`/arrival?airportCode=${airportCode}&domintCode=${domintCode}&continue=` + Date.now());
+            const response = await fetch(`/arrival?airportCode=${airportCode}&continue=` + Date.now());
             // แบบ ใช้จริง
-            // const response = await fetch(`${contextPath}/arrival?airportCode=${airportCode}&domintCode=${domintCode}&continue=` + Date.now());
+            // const response = await fetch(`${contextPath}/arrival?airportCode=${airportCode}&continue=` + Date.now());
 
             const html = await response.text();
 

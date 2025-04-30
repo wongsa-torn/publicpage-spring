@@ -17,6 +17,8 @@ public class ItemArrival {
     private String estimate;
     private String remark;
 
+    private String domint;
+    
     private List<String> jfnoList;  // แก้เป็น List<String> แทน String
 
     // Getter and Setter
