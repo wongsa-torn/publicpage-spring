@@ -7,7 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 // กำหนดให้ `config-app.properties` อยู่ใน classpath ของโปรเจกต์
 @PropertySource("classpath:config-app.properties")
 // กำหนดให้ `config-common.properties` อยู่ในตำแหน่งภายนอกโปรเจกต์
-@PropertySource("file:/D:/test/wildfly-28.0.1.Final/modules/com/application/configuration/main/config-common.properties")
+@PropertySource("file:/D:/config/config-common.properties")
 public class ExternalConfigLoader {
     // ไม่มี method ก็ได้ Spring จะโหลด properties เข้ามาให้เอง
 }
