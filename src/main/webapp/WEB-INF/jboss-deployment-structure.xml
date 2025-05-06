@@ -8,6 +8,9 @@
 	  </exclude-subsystems>
 	  <dependencies>
 	  <module name="org.slf4j" />
+
+      <module name="com.application.configuration" optional="true"/>
+
 	  </dependencies>
 	</deployment>
 </jboss-deployment-structure>

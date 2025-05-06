@@ -19,7 +19,7 @@ public class PublicpageApplication {
 	public CommandLineRunner commandLineRunner(String[] args) {
 		// Print on console when run app.
 		return runner -> {
-			System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Publicpage Start>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+			System.out.println("Publicpage Start>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 		};
 	}
 
