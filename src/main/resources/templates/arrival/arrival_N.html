@@ -85,16 +85,31 @@
                         <div id="scrollArea" class="grid grid-cols-12">
                             <div class="col-span-1 p-2"
                                 th:class="${iterStat.index % 2 == 0} ? 'bg-green-500 text-white flex items-center justify-center' : 'bg-green-700 text-white flex items-center justify-center'">
+<<<<<<< HEAD
                                 <span class="bg-yellow-500 p-1 rounded-lg text-black font-bold" th:text="${arrival.timeArrival}"></span></div>
+=======
+                                <span class="bg-yellow-500 p-1 rounded-lg text-black font-bold"
+                                    th:text="${arrival.timeArrival}"></span>
+                            </div>
+>>>>>>> b62e9f644d62545e08a62f2ce5e5ffbe7ced3db0
                             <div class="w-full grid grid-cols-11 font-bold"
                                 th:class="${iterStat.index % 2 == 0} ? 'grid grid-cols-12 bg-green-500 text-white col-span-11 ' : 'grid grid-cols-12 bg-green-700 text-white col-span-11 '">
                                 <div class="col-span-2 flex items-center">
                                     <img th:src="@{'/images/image/' + ${arrival.airline} + '_S.gif'}" alt="Airline Logo"
                                         class="w-[150px] max-h-[40px] h-full" onerror="this.style.display='none'">
                                 </div>
+<<<<<<< HEAD
                                 <div class="col-span-3 p-2 flex items-center justify-center font-bold"
                                     th:text="${arrival.flightFrom}">
                                 </div>
+=======
+                                <div class="col-span-2 p-2 flex items-center justify-center font-bold"
+                                    th:text="${arrival.flightFrom}">
+                                </div>
+                                <div class="col-span-1 p-2 flex items-center justify-center font-bold"
+                                    th:text="${arrival.domint}">
+                                </div>
+>>>>>>> b62e9f644d62545e08a62f2ce5e5ffbe7ced3db0
                                 <div class="col-span-2 p-2 flex items-center justify-center"
                                     th:text="${arrival.flight}">
                                 </div>

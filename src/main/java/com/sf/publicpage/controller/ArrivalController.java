@@ -13,6 +13,7 @@ import com.sf.publicpage.model.ItemArrival;
 import com.sf.publicpage.service.ArrivalService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/arrival")
@@ -46,11 +47,41 @@ public class ArrivalController {
     // model.addAttribute("departures", departures);
     // return "departure/departure"; // ชื่อไฟล์ HTML ที่จะใช้แสดงข้อมูล
     // }
-    @GetMapping("")
-    public String showArrivalPage(@RequestParam(defaultValue = "DMK") String airportCode, Model model) {
+
+    // @GetMapping("")
+    // public String showArrivalPage(@RequestParam(defaultValue = "DMK") String
+    // airportCode, String domintCode,Model model) {
+    // List<ItemArrival> list = arrivalService.getDataArrival(airportCode);
+    // model.addAttribute("arrivals", list);
+    // model.addAttribute("selectedAirport", airportCode);
+    // model.addAttribute("selectedDomint", domintCode);
+    // return "arrival/arrival";
+    // }
+
+    @GetMapping("/arrival_N")
+    public String showArrival_DevPage(@RequestParam(defaultValue = "DMK") String airportCode, Model model) {
         List<ItemArrival> list = arrivalService.getDataArrival(airportCode);
         model.addAttribute("arrivals", list);
         model.addAttribute("selectedAirport", airportCode);
+        return "arrival/arrival_N";
+    }
+
+    @GetMapping("")
+    public String showArrivalPage(@RequestParam(defaultValue = "DMK") String airportCode,
+            @RequestParam(defaultValue = "ALL") String domintCode,
+            Model model) {
+        List<ItemArrival> list = arrivalService.getDataArrival(airportCode);
+
+        // ✅ กรองตาม domintCode ถ้าไม่ใช่ ALL
+        if (!"ALL".equalsIgnoreCase(domintCode)) {
+            list = list.stream()
+                    .filter(a -> domintCode.equalsIgnoreCase(a.getDomint()))
+                    .collect(Collectors.toList());
+        }
+
+        model.addAttribute("arrivals", list);
+        model.addAttribute("selectedAirport", airportCode);
+        model.addAttribute("selectedDomint", domintCode);
         return "arrival/arrival";
     }
 

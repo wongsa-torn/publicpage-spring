@@ -46,17 +46,43 @@
         <!-- <h1>arrival Flights</h1> -->
         <div class="relative h-[7vh]">
             <img class="w-full h-full" th:src="@{'/images/Arrivals.png'}" alt="Arrival">
-            <form th:action="@{/arrival}" method="get">
-                <select name="airportCode" onchange="this.form.submit()"
-                    class="absolute top-1.5 right-8 text-[36px] font-bold text-black">
-                    <option value="BKK" th:selected="${selectedAirport == 'BKK'}">BKK</option>
-                    <option value="DMK" th:selected="${selectedAirport == 'DMK'}">DMK</option>
-                    <option value="HKT" th:selected="${selectedAirport == 'HKT'}">HKT</option>
-                    <option value="HDY" th:selected="${selectedAirport == 'HDY'}">HDY</option>
-                    <option value="CNX" th:selected="${selectedAirport == 'CNX'}">CNX</option>
-                    <option value="CEI" th:selected="${selectedAirport == 'CEI'}">CEI</option>
-                </select>
-            </form>
+
+            <div class="absolute top-1.5  right-8 text-[36px] font-bold text-white flex gap-4 ">
+                <!-- <form th:action="@{/arrival}" method="get">
+                    <select name="domintCode" onchange="this.form.submit()" class="bg-transparent">
+                        <option value="" th:selected="${selectedDomint == null or selectedDomint == ''}">All</option>
+                        <option value="I" th:selected="${selectedDomint == 'I'}">Inter</option>
+                        <option value="D" th:selected="${selectedDomint == 'D'}">Dom</option>
+                    </select>
+                </form>
+                <form th:action="@{/arrival}" method="get">
+                    <select name="airportCode" onchange="this.form.submit()" class="bg-transparent">
+                        <option value="BKK" th:selected="${selectedAirport == 'BKK'}">BKK</option>
+                        <option value="DMK" th:selected="${selectedAirport == 'DMK'}">DMK</option>
+                        <option value="HKT" th:selected="${selectedAirport == 'HKT'}">HKT</option>
+                        <option value="HDY" th:selected="${selectedAirport == 'HDY'}">HDY</option>
+                        <option value="CNX" th:selected="${selectedAirport == 'CNX'}">CNX</option>
+                        <option value="CEI" th:selected="${selectedAirport == 'CEI'}">CEI</option>
+                    </select>
+                </form> -->
+                <form id="filterForm" th:action="@{/arrival}" method="get" class="flex gap-6">
+                    <select name="domintCode" class="bg-transparent" onchange="submitFilters()">
+                        <option class="text-black" value="ALL" th:selected="${selectedDomint == 'ALL'}">All</option>
+                        <option class="text-black" value="I" th:selected="${selectedDomint == 'I'}">International
+                        </option>
+                        <option class="text-black" value="D" th:selected="${selectedDomint == 'D'}">Domestic</option>
+                    </select>
+                    <select name="airportCode" class="bg-transparent" onchange="submitFilters()">
+                        <option class="text-black" value="BKK" th:selected="${selectedAirport == 'BKK'}">BKK</option>
+                        <option class="text-black" value="DMK" th:selected="${selectedAirport == 'DMK'}">DMK</option>
+                        <option class="text-black" value="HKT" th:selected="${selectedAirport == 'HKT'}">HKT</option>
+                        <option class="text-black" value="HDY" th:selected="${selectedAirport == 'HDY'}">HDY</option>
+                        <option class="text-black" value="CNX" th:selected="${selectedAirport == 'CNX'}">CNX</option>
+                        <option class="text-black" value="CEI" th:selected="${selectedAirport == 'CEI'}">CEI</option>
+                    </select>
+                </form>
+            </div>
+
         </div>
 
         <!-- Head Section -->
@@ -90,6 +116,9 @@
                                 <div class="col-span-3 p-2 flex items-center justify-center"
                                     th:text="${arrival.flightFrom}">
                                 </div>
+                                <!-- <div class="col-span-1 p-2 flex items-center justify-center"
+                                    th:text="${arrival.domint}">
+                                </div> -->
                                 <div class="col-span-1 p-2 flex items-center justify-center"
                                     th:text="${arrival.flight}">
                                 </div>
@@ -134,10 +163,15 @@
 </body>
 
 <script>
-
+    function submitFilters() {
+        document.getElementById('filterForm').submit();
+    }
     const contextPath = window.location.origin + (window.location.pathname.split('/')[1] ? '/' + window.location.pathname.split('/')[1] : '');
 
     const airportCode = new URLSearchParams(window.location.search).get("airportCode") || "BKK";
+
+    const domintCode = new URLSearchParams(window.location.search).get("domintCode") || ""; // "" = แสดงทั้งหมด
+
     const scrollContainer = document.getElementById('autoScrollContainer');
 
     const scrollSpeedDown = 0.5;
@@ -156,9 +190,16 @@
     async function fetchArrivals() {
         try {
             // แบบ ทดสอบ
+<<<<<<< HEAD
             //const response = await fetch(`/arrival?airportCode=${airportCode}&continue=` + Date.now());
             // แบบ ใช้จริง
             const response = await fetch(`${contextPath}/arrival?airportCode=${airportCode}&continue=` + Date.now());
+=======
+            // const response = await fetch(`/arrival?airportCode=${airportCode}&domintCode=${domintCode}&continue=` + Date.now());
+            const response = await fetch(`/arrival?airportCode=${airportCode}&domintCode=${domintCode}&continue=` + Date.now());
+            // แบบ ใช้จริง
+            // const response = await fetch(`${contextPath}/arrival?airportCode=${airportCode}&domintCode=${domintCode}&continue=` + Date.now());
+>>>>>>> b62e9f644d62545e08a62f2ce5e5ffbe7ced3db0
 
             const html = await response.text();
 

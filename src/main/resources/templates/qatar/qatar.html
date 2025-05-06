@@ -70,7 +70,7 @@
                         th:class="${iterStat.index % 2 == 0} ? 'grid grid-cols-12 bg-[#84084A] text-white' : 'grid grid-cols-12 bg-[#681A41] text-white'">
                         <div class="col-span-2 p-2 flex items-center justify-center" th:text="${qatar.timeDepart}">
                         </div>
-                        <div class="col-span-2 flex items-center">
+                        <div class="col-span-2 flex items-center m-4 rounded-lg">
                             <img th:src="@{'/images/image/QR_L.gif'}" alt="Airline Logo" class="w-auto h-auto"
                                 onerror="this.style.display='none'">
                         </div>
@@ -194,8 +194,13 @@
     //ของใหม่
     async function updateQatarStats() {
         try {
+<<<<<<< HEAD
             // const response = await fetch('/qatar/stats');
             const response = await fetch(`${contextPath}/qatar/stats`);
+=======
+            const response = await fetch('/qatar/stats');
+            // const response = await fetch(`${contextPath}/qatar/stats`);
+>>>>>>> b62e9f644d62545e08a62f2ce5e5ffbe7ced3db0
             const data = await response.json();
 
             document.getElementById('updateDateText').textContent = data.datestamp;
