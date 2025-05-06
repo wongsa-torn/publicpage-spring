@@ -71,12 +71,12 @@
                     </select>
 
                     <select name="airportCode" class="bg-transparent" onchange="submitFilters()">
-                        <option class="text-black"value="BKK" th:selected="${selectedAirport == 'BKK'}">BKK</option>
-                        <option class="text-black"value="DMK" th:selected="${selectedAirport == 'DMK'}">DMK</option>
-                        <option class="text-black"value="HKT" th:selected="${selectedAirport == 'HKT'}">HKT</option>
-                        <option class="text-black"value="HDY" th:selected="${selectedAirport == 'HDY'}">HDY</option>
-                        <option class="text-black"value="CNX" th:selected="${selectedAirport == 'CNX'}">CNX</option>
-                        <option class="text-black"value="CEI" th:selected="${selectedAirport == 'CEI'}">CEI</option>
+                        <option class="text-black"value="BKK" th:selected="${selectedAirport == 'BKK'}">SUVARNABHUMI</option>
+                        <option class="text-black"value="DMK" th:selected="${selectedAirport == 'DMK'}">CHIANG RAI/MAE FAH LUANG</option>
+                        <option class="text-black"value="HKT" th:selected="${selectedAirport == 'HKT'}">HATYAI</option>
+                        <option class="text-black"value="HDY" th:selected="${selectedAirport == 'HDY'}">PHUKET</option>
+                        <option class="text-black"value="CNX" th:selected="${selectedAirport == 'CNX'}">CHIANG MAI</option>
+                        <option class="text-black"value="CEI" th:selected="${selectedAirport == 'CEI'}">DON MUEANG</option>
                     </select>
                 </form>
             </div>
@@ -449,9 +449,9 @@
         try {
           
             // แบบ ทดสอบ
-            // const response = await fetch(`/departure?airportCode=${airportCode}&domintCode=${domintCode}&type=${type}&continue=` + Date.now());
+            const response = await fetch(`/departure?airportCode=${airportCode}&domintCode=${domintCode}&type=${type}&continue=` + Date.now());
             // แบบ ใช้จริง
-            const response = await fetch(`${contextPath}/departure?airportCode=${airportCode}&domintCode=${domintCode}&type=${type}&continue=` + Date.now());
+            // const response = await fetch(`${contextPath}/departure?airportCode=${airportCode}&domintCode=${domintCode}&type=${type}&continue=` + Date.now());
 
             const html = await response.text();
 
