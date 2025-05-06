@@ -449,9 +449,9 @@
         try {
           
             // แบบ ทดสอบ
-            const response = await fetch(`/departure?airportCode=${airportCode}&domintCode=${domintCode}&type=${type}&continue=` + Date.now());
+            // const response = await fetch(`/departure?airportCode=${airportCode}&domintCode=${domintCode}&type=${type}&continue=` + Date.now());
             // แบบ ใช้จริง
-            // const response = await fetch(`${contextPath}/departure?airportCode=${airportCode}&domintCode=${domintCode}&type=${type}&continue=` + Date.now());
+            const response = await fetch(`${contextPath}/departure?airportCode=${airportCode}&domintCode=${domintCode}&type=${type}&continue=` + Date.now());
 
             const html = await response.text();
 

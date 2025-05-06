@@ -190,9 +190,9 @@
     async function fetchArrivals() {
         try {
             // แบบ ทดสอบ
-            const response = await fetch(`/arrival?airportCode=${airportCode}&domintCode=${domintCode}&continue=` + Date.now());
+            // const response = await fetch(`/arrival?airportCode=${airportCode}&domintCode=${domintCode}&continue=` + Date.now());
             // แบบ ใช้จริง
-            // const response = await fetch(`${contextPath}/arrival?airportCode=${airportCode}&domintCode=${domintCode}&continue=` + Date.now());
+            const response = await fetch(`${contextPath}/arrival?airportCode=${airportCode}&domintCode=${domintCode}&continue=` + Date.now());
 
 
             const html = await response.text();
