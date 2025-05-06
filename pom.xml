@@ -13,7 +13,7 @@
 	<artifactId>publicpage-spring</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	 <packaging>war</packaging> 
-	<!--<packaging>jar</packaging> -->
+	<!-- <packaging>jar</packaging> -->
 	<name>publicpage</name>
 	<description>Test project for Spring Boot</description>
 	<properties>
