@@ -447,17 +447,12 @@
 
     async function fetchDepartures() {
         try {
-            // const response = await fetch(`${contextPath}/departure?airportCode=${airportCode}&type=${type}&continue=` + Date.now());
+          
             // แบบ ทดสอบ
-<<<<<<< HEAD
-            // const response = await fetch(`/departure?airportCode=${airportCode}&continue=` + Date.now());
+            // const response = await fetch(`/departure?airportCode=${airportCode}&domintCode=${domintCode}&type=${type}&continue=` + Date.now());
             // แบบ ใช้จริง
-            const response = await fetch(`${contextPath}/departure?airportCode=${airportCode}&type=${type}&continue=` + Date.now());
-=======
-            const response = await fetch(`/departure?airportCode=${airportCode}&domintCode=${domintCode}&type=${type}&continue=` + Date.now());
-            // แบบ ใช้จริง
-            // const response = await fetch(`${contextPath}/departure?airportCode=${airportCode}&domintCode=${domintCode}&type=${type}&continue=` + Date.now());
->>>>>>> b62e9f644d62545e08a62f2ce5e5ffbe7ced3db0
+            const response = await fetch(`${contextPath}/departure?airportCode=${airportCode}&domintCode=${domintCode}&type=${type}&continue=` + Date.now());
+
             const html = await response.text();
 
             const parser = new DOMParser();

@@ -58,13 +58,13 @@ public class ArrivalController {
     // return "arrival/arrival";
     // }
 
-    @GetMapping("/arrival_N")
-    public String showArrival_DevPage(@RequestParam(defaultValue = "DMK") String airportCode, Model model) {
-        List<ItemArrival> list = arrivalService.getDataArrival(airportCode);
-        model.addAttribute("arrivals", list);
-        model.addAttribute("selectedAirport", airportCode);
-        return "arrival/arrival_N";
-    }
+    // @GetMapping("/arrival_N")
+    // public String showArrival_DevPage(@RequestParam(defaultValue = "DMK") String airportCode, Model model) {
+    //     List<ItemArrival> list = arrivalService.getDataArrival(airportCode);
+    //     model.addAttribute("arrivals", list);
+    //     model.addAttribute("selectedAirport", airportCode);
+    //     return "arrival/arrival_N";
+    // }
 
     @GetMapping("")
     public String showArrivalPage(@RequestParam(defaultValue = "DMK") String airportCode,

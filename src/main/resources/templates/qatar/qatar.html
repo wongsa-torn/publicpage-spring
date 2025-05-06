@@ -173,7 +173,7 @@
     //ของเก่า
     // function updateQatarStats() {
     //     // fetch('/qatar/stats')
-             fetch(`${contextPath}/qatar/stats`)
+    fetch(`${contextPath}/qatar/stats`)
     //         .then(res => res.json())
     //         .then(data => {
     //             document.getElementById('updateDateText').textContent = data.datestamp;
@@ -194,13 +194,10 @@
     //ของใหม่
     async function updateQatarStats() {
         try {
-<<<<<<< HEAD
+            //ทดสอบ
             // const response = await fetch('/qatar/stats');
+            //ใช้จริง
             const response = await fetch(`${contextPath}/qatar/stats`);
-=======
-            const response = await fetch('/qatar/stats');
-            // const response = await fetch(`${contextPath}/qatar/stats`);
->>>>>>> b62e9f644d62545e08a62f2ce5e5ffbe7ced3db0
             const data = await response.json();
 
             document.getElementById('updateDateText').textContent = data.datestamp;
@@ -247,7 +244,7 @@
     }
     //ของใหม่
 
-    
+
     function renderRemarksAndRows() {
         const remarkContainers = document.querySelectorAll('.remark-container');
 
