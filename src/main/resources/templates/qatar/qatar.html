@@ -204,9 +204,9 @@
             document.getElementById('updateTimeText').textContent = data.timestamp;
             document.getElementById('qatarCount').textContent = data.count;
 
-            console.log('✅ อัปเดตข้อมูลสำเร็จ:', data);
+            // console.log('✅ อัปเดตข้อมูลสำเร็จ:', data);
         } catch (err) {
-            console.error('❌ อัปเดตข้อมูลล้มเหลว:', err);
+            // console.error('❌ อัปเดตข้อมูลล้มเหลว:', err);
         }
     }
     //ของใหม่
@@ -217,21 +217,21 @@
         const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
         const currentScroll = scrollContainer.scrollTop;
 
-        console.log(`🟡 currentScroll: ${currentScroll}, maxScroll: ${maxScroll}`);
+        // console.log(`🟡 currentScroll: ${currentScroll}, maxScroll: ${maxScroll}`);
         if (currentScroll >= maxScroll - 1) { // เผื่อไม่ชนเป๊ะ
-            console.log("📌 ถึงล่างสุดแล้ว กำลังโหลดข้อมูลใหม่...");
+            // console.log("📌 ถึงล่างสุดแล้ว กำลังโหลดข้อมูลใหม่...");
             paused = true;
 
             // รอ 30 วิ ก่อนอัปเดตและ scroll กลับบนสุด
             setTimeout(() => {
                 updateQatarStats().then(() => {
                     scrollContainer.scrollTop = 0;
-                    console.log("⬆️ เลื่อนกลับบนสุดแล้ว");
+                    // console.log("⬆️ เลื่อนกลับบนสุดแล้ว");
 
                     // ✅ เริ่ม scroll ใหม่หลังจากโหลดเสร็จ
                     paused = false;
-                    console.log("🔁 เริ่ม scroll ใหม่");
-                    requestAnimationFrame(autoScroll);
+                    // console.log("🔁 เริ่ม scroll ใหม่");
+                    // requestAnimationFrame(autoScroll);
                 });
             }, 8000); // 30 วินาที
         } else {
