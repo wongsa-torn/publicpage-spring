@@ -1,0 +1,62 @@
+<!-- Table -->
+<td class="p-3 border-b border-x border-l text-center">
+    <button class="p-1 hover:scale-110 transition-transform duration-150" title="Edit"
+        th:attr="hx-get=@{/management/edit/{username}(username=${user.username})}" hx-target="#modalFormContainer"
+        hx-swap="innerHTML" onclick="openModal()">
+    </button>
+</td>
+
+
+<!-- Modal -->
+<div id="myModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+
+
+    <script>
+        function openModal() {
+            document.getElementById('myModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').classList.add('hidden');
+        }
+
+        function loadUserForm(username) {
+            const container = document.getElementById('modalFormContainer');
+            const modalTitle = document.getElementById('modalTitle');
+
+            if (username === 'new') {
+                modalTitle.innerText = 'Add New User';
+
+                htmx.ajax('GET', contextPath + '/management/add', {
+                    target: container,
+                    swap: 'innerHTML',
+                    handler: function (xhr) {
+                        if (xhr.status === 200) {
+                            console.log('โหลดข้อมูลสำหรับผู้ใช้ใหม่สำเร็จ');
+                           // ให้ส่วนโหลดของ modal ทำงานลำดับถัดไป
+                        } else {
+                            console.error('โหลดไม่สำเร็จ:', xhr.status);
+                        }
+                    }
+                });
+
+            } else {
+                modalTitle.innerText = 'Edit User';
+
+                htmx.ajax('GET', `${contextPath}/management/edit/${username}`, {
+                    target: container,
+                    swap: 'innerHTML',
+                    handler: function (xhr) {
+                        if (xhr.status === 200) {
+                            console.log('โหลดข้อมูลสำหรับแก้ไขผู้ใช้สำเร็จ');
+                            // ให้ส่วนโหลดของ modal ทำงานลำดับถัดไป
+                        } else {
+                            console.error('โหลดไม่สำเร็จ:', xhr.status);
+                        }
+                    }
+                });
+            }
+
+            openModal();
+        }
+    </script>
